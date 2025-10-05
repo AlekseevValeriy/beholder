@@ -1,0 +1,109 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = true
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net9.0-android
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Beholder
+build_property.ProjectDir = D:\Coding_projects\BeholderClient\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[D:/Coding_projects/BeholderClient/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+
+[D:/Coding_projects/BeholderClient/AppShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.AppShell.xaml
+build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
+build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
+
+[D:/Coding_projects/BeholderClient/Controls/Channel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Controls.Channel.xaml
+build_metadata.AdditionalFiles.TargetPath = Controls\Channel.xaml
+build_metadata.AdditionalFiles.RelativePath = Controls\Channel.xaml
+
+[D:/Coding_projects/BeholderClient/Controls/Filter.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Controls.Filter.xaml
+build_metadata.AdditionalFiles.TargetPath = Controls\Filter.xaml
+build_metadata.AdditionalFiles.RelativePath = Controls\Filter.xaml
+
+[D:/Coding_projects/BeholderClient/Controls/ShortChannel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Controls.ShortChannel.xaml
+build_metadata.AdditionalFiles.TargetPath = Controls\ShortChannel.xaml
+build_metadata.AdditionalFiles.RelativePath = Controls\ShortChannel.xaml
+
+[D:/Coding_projects/BeholderClient/Controls/Tag.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Controls.Tag.xaml
+build_metadata.AdditionalFiles.TargetPath = Controls\Tag.xaml
+build_metadata.AdditionalFiles.RelativePath = Controls\Tag.xaml
+
+[D:/Coding_projects/BeholderClient/Controls/Teleprogram.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Controls.Teleprogram.xaml
+build_metadata.AdditionalFiles.TargetPath = Controls\Teleprogram.xaml
+build_metadata.AdditionalFiles.RelativePath = Controls\Teleprogram.xaml
+
+[D:/Coding_projects/BeholderClient/Resources/Styles/Colors.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
+
+[D:/Coding_projects/BeholderClient/Resources/Styles/Styles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+
+[D:/Coding_projects/BeholderClient/Views/AccountPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Views.AccountPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\AccountPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\AccountPage.xaml
+
+[D:/Coding_projects/BeholderClient/Views/AuthorizationPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Views.AuthorizationPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\AuthorizationPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\AuthorizationPage.xaml
+
+[D:/Coding_projects/BeholderClient/Views/FavouritesPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Views.FavouritesPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\FavouritesPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\FavouritesPage.xaml
+
+[D:/Coding_projects/BeholderClient/Views/ListPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Views.ListPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\ListPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\ListPage.xaml
+
+[D:/Coding_projects/BeholderClient/Views/SearchPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Views.SearchPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\SearchPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\SearchPage.xaml
+
+[D:/Coding_projects/BeholderClient/Views/TeleprogramPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Views.TeleprogramPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\TeleprogramPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\TeleprogramPage.xaml

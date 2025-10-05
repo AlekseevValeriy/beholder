@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Beholder.Views.AccountPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:Beholder.Converters"
+    xmlns:vm="clr-namespace:Beholder.ViewModels"
+    Title="AccountPage"
+    x:DataType="vm:AccountPageViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:IsVisiableToEye x:Key="IsVisiableToEye" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid RowDefinitions="auto,*,auto">
+        <Border
+            Grid.Row="0"
+            BackgroundColor="{StaticResource Primary}"
+            HeightRequest="50">
+            <Grid Margin="6,0,6,0" ColumnDefinitions="auto,*">
+                <Button
+                    Grid.Column="0"
+                    Command="{Binding ToBackCommand}"
+                    HeightRequest="30"
+                    MinimumHeightRequest="30"
+                    Text="Назад" />
+            </Grid>
+        </Border>
+        <VerticalStackLayout
+            Grid.Row="1"
+            Margin="12"
+            Spacing="12">
+            <VerticalStackLayout Spacing="12">
+                <Grid ColumnDefinitions="auto,*,auto">
+                    <Label
+                        Grid.Column="0"
+                        HorizontalOptions="Start"
+                        Text="Логин"
+                        VerticalOptions="Center" />
+                </Grid>
+                <Entry Placeholder="Логин..." Text="{Binding Login}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Grid ColumnDefinitions="auto,*,auto">
+                    <Label
+                        Grid.Column="0"
+                        HorizontalOptions="Start"
+                        Text="Пароль"
+                        VerticalOptions="Center" />
+                    <Button
+                        Grid.Column="2"
+                        BackgroundColor="Transparent"
+                        Command="{Binding OnEyeClickCommand}"
+                        HeightRequest="25"
+                        ImageSource="{Binding IsPasswordVisiable, Converter={StaticResource IsVisiableToEye}}"
+                        VerticalOptions="Center"
+                        WidthRequest="25" />
+                </Grid>
+                <Entry
+                    IsPassword="{Binding IsPasswordVisiable}"
+                    Placeholder="Пароль..."
+                    Text="{Binding Password}" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+        <Border
+            Grid.Row="2"
+            BackgroundColor="Transparent"
+            HeightRequest="60"
+            StrokeThickness="0">
+            <Grid Margin="6,0,6,0" ColumnDefinitions="auto,*,auto">
+                <Button
+                    Grid.Column="0"
+                    Command="{Binding LogoutCommand}"
+                    HeightRequest="40"
+                    Text="Выйти"
+                    WidthRequest="150" />
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding DeleteAccountCommand}"
+                    HeightRequest="40"
+                    Text="Удалить"
+                    WidthRequest="150" />
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>

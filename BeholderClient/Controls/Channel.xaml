@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="Beholder.Controls.Channel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Beholder.Controls"
+    xmlns:converters="clr-namespace:Beholder.Converters"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+    x:Name="This"
+    x:DataType="controls:Channel">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:StringTagsToList x:Key="StringTagsToList" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Border
+        Margin="18,8"
+        BackgroundColor="{StaticResource Surface}"
+        StrokeShape="RoundRectangle 10">
+        <Border.Shadow>
+            <Shadow
+                Brush="#22000000"
+                Opacity="1.2"
+                Radius="5" />
+        </Border.Shadow>
+        <Grid
+            Padding="12,6"
+            ColumnDefinitions="auto,*"
+            ColumnSpacing="24"
+            RowDefinitions="30,30,*"
+            RowSpacing="6">
+            <ffimageloading:CachedImage
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                x:DataType="controls:Channel"
+                Aspect="AspectFit"
+                BindingContext="{x:Reference This}"
+                ErrorPlaceholder="nosignal.png"
+                HeightRequest="65"
+                Source="{Binding Image}"
+                WidthRequest="65" />
+            <Grid
+                Grid.Row="0"
+                Grid.Column="1"
+                ColumnDefinitions="auto,auto,*"
+                ColumnSpacing="36">
+                <Label
+                    Grid.Column="0"
+                    x:DataType="controls:Channel"
+                    BindingContext="{x:Reference This}"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    Text="{Binding Number}"
+                    TextColor="{StaticResource PrimaryDark}" />
+                <Label
+                    Grid.Column="1"
+                    x:DataType="controls:Channel"
+                    BindingContext="{x:Reference This}"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    LineBreakMode="TailTruncation"
+                    MaxLines="1"
+                    Text="{Binding Title}"
+                    TextColor="{StaticResource PrimaryDark}" />
+            </Grid>
+
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                x:DataType="controls:Channel"
+                BindingContext="{x:Reference This}"
+                FontSize="17"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding Description}"
+                TextColor="#333333" />
+            <ScrollView
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Padding="2,2,2,8"
+                Orientation="Horizontal">
+                <FlexLayout
+                    x:Name="TagsLayout"
+                    x:DataType="controls:Channel"
+                    BindingContext="{x:Reference This}"
+                    Wrap="NoWrap" />
+            </ScrollView>
+        </Grid>
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OpenTeleprogramPage" />
+        </Border.GestureRecognizers>
+    </Border>
+</ContentView>

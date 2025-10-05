@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Beholder.Views.AuthorizationPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Beholder.ViewModels"
+    Title="AuthorizationPage"
+    x:DataType="vm:AuthorizationPageViewModel">
+    <Grid RowDefinitions="auto,*,auto">
+        <Border
+            Grid.Row="0"
+            BackgroundColor="{StaticResource Primary}"
+            HeightRequest="50">
+
+            <Grid Margin="6,0,6,0" ColumnDefinitions="auto,*">
+                <Button
+                    Grid.Column="0"
+                    Command="{Binding ToBackCommand}"
+                    HeightRequest="30"
+                    MinimumHeightRequest="30"
+                    Text="Назад" />
+            </Grid>
+        </Border>
+        <VerticalStackLayout
+            Grid.Row="1"
+            Margin="12"
+            Spacing="24">
+            <VerticalStackLayout Spacing="12">
+                <Label HorizontalOptions="Start" Text="Логин" />
+                <Entry Placeholder="Логин..." Text="{Binding Login}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="12">
+                <Label HorizontalOptions="Start" Text="Пароль" />
+                <Entry Placeholder="Пароль..." Text="{Binding Password}" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+        <Border
+            Grid.Row="2"
+            BackgroundColor="Transparent"
+            HeightRequest="60"
+            StrokeThickness="0">
+            <Grid Margin="6,0,6,0" ColumnDefinitions="auto,*,auto">
+                <Button
+                    Grid.Column="0"
+                    Command="{Binding RegistrationCommand}"
+                    HeightRequest="40"
+                    Text="Регистрация"
+                    WidthRequest="150" />
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding AuthorizationCommand}"
+                    HeightRequest="40"
+                    Text="Вход"
+                    WidthRequest="150" />
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>

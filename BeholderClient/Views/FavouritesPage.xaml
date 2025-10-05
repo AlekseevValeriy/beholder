@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Beholder.Views.favoritesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Beholder.Controls"
+    xmlns:models="clr-namespace:Beholder.Models"
+    xmlns:vm="clr-namespace:Beholder.ViewModels"
+    Title="favoritesPage"
+    x:DataType="vm:FavoritesPageViewModel">
+    <Grid RowDefinitions="auto,*">
+        <Border
+            Grid.Row="0"
+            BackgroundColor="{StaticResource Primary}"
+            HeightRequest="50">
+            <Grid Margin="12,0,6,0" ColumnDefinitions="auto,*,auto">
+                <HorizontalStackLayout Grid.Column="0">
+                    <Image
+                        HeightRequest="20"
+                        Source="user4.png"
+                        WidthRequest="20" />
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding ToAuthorizationCommand}"
+                        ContentLayout="Left,5"
+                        HeightRequest="30"
+                        Text="{Binding UserName}"
+                        TextColor="White" />
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1">
+            <ScrollView Orientation="Vertical">
+                <VerticalStackLayout Margin="12">
+                    <CollectionView ItemsSource="{Binding Favorites}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:FavoriteResponse">
+
+                                <controls:ShortChannel
+                                    Title="{Binding name}"
+                                    ChannelId="{Binding id}"
+                                    Image="{Binding icon_path}"
+                                    TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </Grid>
+
+    </Grid>
+</ContentPage>

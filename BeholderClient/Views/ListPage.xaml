@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Beholder.Views.ListPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Beholder.Controls"
+    xmlns:models="clr-namespace:Beholder.Models"
+    xmlns:vm="clr-namespace:Beholder.ViewModels"
+    Title="ListPage"
+    x:DataType="vm:ListPageViewModel">
+    <Grid RowDefinitions="auto,*">
+        <Border
+            Grid.Row="0"
+            BackgroundColor="{StaticResource Primary}"
+            HeightRequest="50">
+            <FlexLayout
+                x:Name="FiltersLayout"
+                Margin="12,0,12,0"
+                JustifyContent="SpaceBetween"
+                VerticalOptions="Center">
+                <controls:Filter Command="{Binding ChannelSortCommand}" Text="Номер" />
+                <controls:Filter Command="{Binding ChannelSortCommand}" Text="Название" />
+                <controls:Filter Command="{Binding ChannelSortCommand}" Text="Описание" />
+            </FlexLayout>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <ScrollView x:Name="Body" Orientation="Vertical">
+                <VerticalStackLayout Margin="12">
+                    <CollectionView ItemsSource="{Binding Channels}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:ChannelResponse">
+
+                                <controls:Channel
+                                    Title="{Binding name}"
+                                    ChannelId="{Binding id}"
+                                    Description="{Binding description}"
+                                    Image="{Binding icon_path}"
+                                    Number="{Binding number}"
+                                    Tags="{Binding tags}"
+                                    TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </Grid>
+    </Grid>
+</ContentPage>

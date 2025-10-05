@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Beholder.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Beholder.Views"
+    Title="Beholder">
+
+    <TabBar>
+        <Tab
+            x:Name="list"
+            Title="Список"
+            Icon="tab_tv.png">
+            <ShellContent ContentTemplate="{DataTemplate local:ListPage}" Route="list" />
+        </Tab>
+        <Tab
+            x:Name="search"
+            Title="Поиск"
+            Icon="tab_loupe.png">
+            <ShellContent ContentTemplate="{DataTemplate local:SearchPage}" Route="search" />
+        </Tab>
+        <Tab
+            x:Name="favorite"
+            Title="Избранное"
+            Icon="tab_star.png">
+            <ShellContent ContentTemplate="{DataTemplate local:favoritesPage}" Route="favorite" />
+        </Tab>
+    </TabBar>
+
+</Shell>

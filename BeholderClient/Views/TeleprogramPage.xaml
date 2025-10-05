@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Beholder.Views.TeleprogramPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Beholder.Controls"
+    xmlns:converters="clr-namespace:Beholder.Converters"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+    xmlns:models="clr-namespace:Beholder.Models"
+    xmlns:vm="clr-namespace:Beholder.ViewModels"
+    Title="TeleprogramPage"
+    x:DataType="vm:TeleprogramPageViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StringTagsToList x:Key="StringTagsToList" />
+            <converters:BooleanFavoriteToImage x:Key="BooleanFavoriteToImage" />
+            <converters:BooleanInverse x:Key="BooleanInverse" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="auto,*">
+        <Border
+            Grid.Row="0"
+            Padding="6,0,6,0"
+            BackgroundColor="{StaticResource Primary}"
+            HeightRequest="50">
+            <Grid ColumnDefinitions="auto,*,auto">
+                <Button
+                    Grid.Column="0"
+                    BorderWidth="2"
+                    Command="{Binding ToBackCommand}"
+                    HeightRequest="35"
+                    MinimumHeightRequest="35"
+                    Text="Назад" />
+                <ImageButton
+                    Grid.Column="2"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ClickFavoriteButtonCommand}"
+                    HeightRequest="30"
+                    IsVisible="{Binding IsAuthorized}"
+                    MinimumHeightRequest="30"
+                    Source="{Binding IsFavorite, Converter={StaticResource BooleanFavoriteToImage}}" />
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1">
+            <ScrollView IsVisible="{Binding IsLoaded}">
+                <VerticalStackLayout Margin="12" Spacing="12">
+                    <Grid ColumnDefinitions="auto,*" ColumnSpacing="24">
+                        <ffimageloading:CachedImage
+                            Grid.Column="0"
+                            Aspect="AspectFit"
+                            ErrorPlaceholder="nosignal.png"
+                            HeightRequest="100"
+                            Source="{Binding Channel.icon_path}"
+                            WidthRequest="100" />
+                        <Label
+                            Grid.Column="1"
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            HorizontalOptions="Start"
+                            Text="{Binding Channel.name}"
+                            TextColor="{StaticResource Primary}"
+                            VerticalOptions="Center" />
+                    </Grid>
+                    <Label
+                        Grid.Column="0"
+                        FontSize="16"
+                        Text="{Binding Path=Channel.number, StringFormat='Канал № {0}'}"
+                        TextColor="#444"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding Channel.description}"
+                        TextColor="#666" />
+                    <Border
+                        BackgroundColor="Transparent"
+                        HeightRequest="25"
+                        IsVisible="{Binding TagsContaing}"
+                        StrokeThickness="0" />
+                    <Line
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding TagsContaing}"
+                        Stroke="#1A000000"
+                        StrokeThickness="2"
+                        X1="0"
+                        X2="250"
+                        Y1="0"
+                        Y2="0" />
+                    <Border
+                        BackgroundColor="Transparent"
+                        HeightRequest="25"
+                        IsVisible="{Binding TagsContaing}"
+                        StrokeThickness="0" />
+                    <Border
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="Transparent"
+                        StrokeThickness="0">
+                        <CollectionView ItemsSource="{Binding Channel.tags, Converter={StaticResource StringTagsToList}}">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout
+                                    HorizontalItemSpacing="6"
+                                    Orientation="Vertical"
+                                    Span="3"
+                                    VerticalItemSpacing="6" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <controls:Tag Text="{Binding}" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Border>
+
+                    <Border
+                        BackgroundColor="Transparent"
+                        HeightRequest="25"
+                        IsVisible="{Binding SchudleContains}"
+                        StrokeThickness="0" />
+                    <Line
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding SchudleContains}"
+                        Stroke="#1A000000"
+                        StrokeThickness="2"
+                        X1="0"
+                        X2="250"
+                        Y1="0"
+                        Y2="0" />
+                    <Border
+                        BackgroundColor="Transparent"
+                        HeightRequest="25"
+                        IsVisible="{Binding SchudleContains}"
+                        StrokeThickness="0" />
+
+                    <VerticalStackLayout Spacing="6">
+                        <Button
+                            Command="{Binding PastButtonClickCommand}"
+                            HeightRequest="40"
+                            IsVisible="{Binding SchudleContains}"
+                            Text="{Binding PastButtonText}"
+                            WidthRequest="250" />
+                        <CollectionView
+                            IsGrouped="True"
+                            IsVisible="{Binding SchudleContains}"
+                            ItemsSource="{Binding GroupedSchedules}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="6" Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.GroupHeaderTemplate>
+                                <DataTemplate x:DataType="models:ScheduleResponseGroup">
+                                    <VerticalStackLayout>
+                                        <Label
+                                            FontSize="16"
+                                            Text="{Binding Name}"
+                                            TextColor="{StaticResource Primary}" />
+                                        <Border
+                                            BackgroundColor="#1A000000"
+                                            HeightRequest="2"
+                                            Stroke="Transparent"
+                                            StrokeThickness="0" />
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.GroupHeaderTemplate>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:ScheduleResponse">
+                                    <controls:Teleprogram
+                                        Title="{Binding program_title}"
+                                        TimeEnd="{Binding end_time}"
+                                        TimeStart="{Binding start_time}" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button
+                            Command="{Binding FutureButtonClickCommand}"
+                            HeightRequest="40"
+                            IsVisible="{Binding SchudleContains}"
+                            Text="{Binding FutureButtonText}"
+                            WidthRequest="250" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+            <Grid IsVisible="{Binding IsLoaded, Converter={StaticResource BooleanInverse}}">
+                <VerticalStackLayout
+                    HorizontalOptions="Center"
+                    Spacing="12"
+                    VerticalOptions="Center">
+                    <Image
+                        HeightRequest="60"
+                        Source="problem.png"
+                        WidthRequest="60" />
+                    <Label
+                        FontSize="14"
+                        Text="Не удалось загрузить страницу"
+                        TextColor="{StaticResource Primary}" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</ContentPage>

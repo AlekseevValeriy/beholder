@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="Beholder.Controls.ShortChannel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Beholder.Controls"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+    x:Name="This"
+    x:DataType="controls:ShortChannel">
+    <Border
+        Margin="18,8"
+        BackgroundColor="{StaticResource Surface}"
+        StrokeShape="RoundRectangle 10">
+        <Border.Shadow>
+            <Shadow
+                Brush="#22000000"
+                Opacity="1.2"
+                Radius="5" />
+        </Border.Shadow>
+        <Grid
+            Padding="12,6"
+            ColumnDefinitions="auto,*"
+            ColumnSpacing="24">
+            <ffimageloading:CachedImage
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                x:DataType="controls:ShortChannel"
+                Aspect="AspectFit"
+                BindingContext="{x:Reference This}"
+                ErrorPlaceholder="nosignal.png"
+                HeightRequest="65"
+                Source="{Binding Image}"
+                WidthRequest="65" />
+            <Label
+                Grid.Column="1"
+                x:DataType="controls:ShortChannel"
+                BindingContext="{x:Reference This}"
+                FontAttributes="Bold"
+                FontSize="24"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding Title}"
+                TextColor="{StaticResource PrimaryDark}"
+                VerticalOptions="Center" />
+        </Grid>
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OpenTeleprogramPage" />
+        </Border.GestureRecognizers>
+    </Border>
+</ContentView>

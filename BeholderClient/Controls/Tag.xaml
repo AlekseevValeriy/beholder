@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="Beholder.Controls.Tag"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Beholder.Controls"
+    x:Name="This"
+    x:DataType="controls:Tag">
+    <Border
+        Margin="0,0,6,6"
+        BackgroundColor="{StaticResource PrimaryLight}"
+        HeightRequest="30"
+        Stroke="Transparent"
+        StrokeShape="RoundRectangle 4"
+        StrokeThickness="0">
+        <Label
+            Padding="6,2"
+            x:DataType="controls:Tag"
+            BindingContext="{x:Reference This}"
+            FontSize="16"
+            HorizontalOptions="Center"
+            MaxLines="1"
+            Text="{Binding Text}"
+            TextColor="{StaticResource Primary}"
+            VerticalOptions="Center" />
+    </Border>
+</ContentView>
