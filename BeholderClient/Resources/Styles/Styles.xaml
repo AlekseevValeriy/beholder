@@ -2,14 +2,17 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-
-
-    <Style TargetType="ContentPage">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource White}}" />
+    <Style TargetType="ScrollView">
+        <Setter Property="HorizontalScrollBarVisibility"
+                Value="Never" />
+        <Setter Property="VerticalScrollBarVisibility"
+                Value="Never" />
     </Style>
 
     <Style TargetType="ActivityIndicator">
-        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+        <Setter Property="HeightRequest" Value="75" />
+        <Setter Property="WidthRequest" Value="75" />
     </Style>
 
     <Style TargetType="IndicatorView">
@@ -18,10 +21,10 @@
     </Style>
 
     <Style TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource Surface}}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}" />
         <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource BorderLightColor}, Dark={StaticResource BorderLightColor}}" />
         <Setter Property="StrokeShape" Value="Rectangle" />
-        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="StrokeThickness" Value="0" />
     </Style>
 
     <Style TargetType="BoxView">
@@ -30,7 +33,7 @@
 
     <Style TargetType="Button">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
-        <Setter Property="BackgroundColor" Value="#2196F3" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#2196F3, Dark={StaticResource PrimaryDark}}" />
         <Setter Property="FontFamily" Value="SFProRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="BorderWidth" Value="0" />
@@ -40,10 +43,24 @@
         <Setter Property="MinimumWidthRequest" Value="44" />
         <Setter Property="Shadow">
             <Setter.Value>
-                <Shadow
-                    Brush="#40000000"
-                    Radius="4"
-                    Offset="0,2" />
+                <OnPlatform>
+                    <On Platform="Android">
+                        <On.Value>
+                            <Shadow
+                                Brush="#10000000"
+                                Radius="4"
+                                Offset="0,2" />
+                        </On.Value>
+                    </On>
+                    <On Platform="WinUI">
+                        <On.Value>
+                            <Shadow
+                                Brush="#40000000"
+                                Radius="4"
+                                Offset="0,2" />
+                        </On.Value>
+                    </On>
+                </OnPlatform>
             </Setter.Value>
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -135,11 +152,20 @@
     </Style>
 
     <Style TargetType="Entry">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryDarkText}, Dark={StaticResource SecondaryDarkText}}" />
-        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryDark}, Dark={StaticResource White}}" />
+        <Setter Property="BackgroundColor">
+            <Setter.Value>
+                <OnPlatform x:TypeArguments="Color">
+                    <On Platform="Android" Value="Transparent" />
+                    <On Platform="WinUI"
+                        Value="Transparent" />
+                </OnPlatform>
+            </Setter.Value>
+        </Setter>
         <Setter Property="FontFamily" Value="SFProRegular" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" />
+        <Setter Property="PlaceholderColor"
+                Value="{AppThemeBinding Light={StaticResource Gray200}, Dark=#B0C4FF}" />
         <Setter Property="MinimumHeightRequest" Value="44" />
         <Setter Property="MinimumWidthRequest" Value="44" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -295,7 +321,8 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
         <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
         <Setter Property="CancelButtonColor" Value="{StaticResource Gray500}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark=#2A2A2A}" />
         <Setter Property="FontFamily" Value="SFProRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="MinimumHeightRequest" Value="44" />

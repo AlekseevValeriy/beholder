@@ -39,7 +39,7 @@ public partial class Channel : ContentView
 
     public static readonly BindableProperty TagsProperty = BindableProperty.Create(nameof(Tags), typeof(String), typeof(Channel), default(String), propertyChanged: (BindableObject bindable, object oldValue, object newValue) =>
     {
-        if (bindable is not Channel control || newValue is not String tags) return;
+        if (bindable is not Channel control || newValue is not String tags || tags == "") return;
 
         foreach (String tag in tags.Split(","))
         {

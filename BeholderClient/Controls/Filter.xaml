@@ -9,8 +9,8 @@
     <Border
         x:Name="Background"
         Padding="10,4"
-        BackgroundColor="#E3F2FD"
-        HeightRequest="30"
+            BackgroundColor="{AppThemeBinding Light=#E3F2FD, Dark={StaticResource PrimaryDark}}"
+            HeightRequest="30"
         StrokeShape="RoundRectangle 12"
         StrokeThickness="0">
         <Grid
@@ -36,7 +36,7 @@
                 BindingContext="{x:Reference This}"
                 FontSize="14"
                 Text="{Binding Text}"
-                TextColor="#0D47A1"
+                TextColor="#FFFFFF"
                 VerticalOptions="Center" />
 
         </Grid>

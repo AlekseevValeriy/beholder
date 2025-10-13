@@ -23,7 +23,7 @@ public partial class Teleprogram : ContentView
         set => SetValue(TimeEndProperty, value);
     }
 
-    public String Time => $"{TimeStart.ToString("t")} - {TimeEnd.ToString("t")}";
+    public String Time => $"{TimeStart:hh:mm} - {TimeEnd:hh:mm}";
 
     public Teleprogram()
     {

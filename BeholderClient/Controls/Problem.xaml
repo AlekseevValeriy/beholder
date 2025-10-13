@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="Beholder.Controls.Problem"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Beholder.Controls"
+    x:Name="This">
+    <Grid x:DataType="controls:Problem" BindingContext="{x:Reference This}">
+        <VerticalStackLayout
+            HorizontalOptions="Center"
+            Spacing="24"
+            VerticalOptions="Center">
+            <Image
+                x:DataType="controls:Problem"
+                BindingContext="{x:Reference This}"
+                HeightRequest="60"
+                Source="{Binding ImageSource}"
+                WidthRequest="60" />
+            <Label
+                x:DataType="controls:Problem"
+                BindingContext="{x:Reference This}"
+                FontSize="14"
+                Text="{Binding Text}"
+                TextColor="{StaticResource Primary}" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

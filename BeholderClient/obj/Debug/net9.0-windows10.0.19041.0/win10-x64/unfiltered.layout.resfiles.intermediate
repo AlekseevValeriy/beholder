@@ -1,4 +1,3 @@
-Assets\user.json
 OpenSans-Regular.ttf
 OpenSans-Semibold.ttf
 appicon.ico
@@ -50,6 +49,8 @@ appiconWideTile.scale-400.png
 arrow.scale-100.png
 arrow_black.scale-100.png
 arrow_primary.scale-100.png
+db_internal_error.scale-100.png
+db_no_connect.scale-100.png
 dotnet_bot.scale-100.png
 dotnet_bot.scale-125.png
 dotnet_bot.scale-150.png
@@ -60,6 +61,7 @@ eye_close_primary.scale-100.png
 eye_open.scale-100.png
 eye_open_primary.scale-100.png
 nosignal.scale-100.png
+not_found.scale-100.png
 problem.scale-100.png
 star.scale-100.png
 star_outline.scale-100.png

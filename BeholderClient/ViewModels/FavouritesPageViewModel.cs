@@ -4,10 +4,35 @@ public partial class FavoritesPageViewModel : INotifyPropertyChanged
 {
     readonly AppState _appState;
     readonly INavigationService _navigation;
-
     ContentPage? _page;
     Boolean _isBusy = false;
+    Boolean _isLoadSucces = true;
+    Problem _problemContent = Problem.None;
 
+    public Problem ProblemContent
+    {
+        get => _problemContent;
+        set
+        {
+            if (value != _problemContent)
+            {
+                _problemContent = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    public Boolean IsLoadSucces
+    {
+        get => _isLoadSucces;
+        set
+        {
+            if (value != _isLoadSucces)
+            {
+                _isLoadSucces = value;
+                OnPropertyChanged();
+            }
+        }
+    }
     public Boolean IsBusy
     {
         get => _isBusy;
@@ -34,7 +59,7 @@ public partial class FavoritesPageViewModel : INotifyPropertyChanged
     {
         get
         {
-            if (_appState.User is null || _appState.User.HasProblem || _appState.User.Content is null) return "Гость";
+            if (_appState.User is null || _appState.User.HasProblem || _appState.User.Content is null || _appState.User.Content.id == -1) return "Гость";
             return _appState.User.Content.login;
         }
     }
@@ -51,36 +76,38 @@ public partial class FavoritesPageViewModel : INotifyPropertyChanged
         _appState = appState;
         _appState.PropertyChanged += OnAppStatePropertyChanged;
 
-        if (_appState.User == null)
-        {
-            UserRequest? userData = dataLoader.Load();
-
-            if (userData is not null)
-            {
-                Task.Run(async () => await _appState.GetUserAsync(userData.login, userData.password));
-            }
-        }
-
-        if (_appState.Favorites == null)
-        {
-            IsBusy = true;
-            Task.Run(async () =>
-            {
-                Int32 id;
-                if (_appState.User is null || _appState.User.HasProblem || _appState.User.Content is null) id = -1;
-                else id = _appState.User.Content.id;
-
-                await _appState.LoadFavoritesAsync(id);
-            });
-        }
+        if (_appState.Favorites == null) LoadData();
     }
 
-    void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
+    async void LoadData()
     {
-        if (e.PropertyName == nameof(AppState.Favorites) | e.PropertyName == nameof(AppState.User))
+        IsLoadSucces = true;
+        IsBusy = true;
+        ProblemContent = Problem.None;
+        Int32 id;
+        if (_appState.User is null || _appState.User.HasProblem || _appState.User.Content is null) id = -1;
+        else id = _appState.User.Content.id;
+
+        await _appState.LoadFavoritesAsync(id);
+    }
+
+    async void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(AppState.Favorites))
         {
             IsBusy = false;
+
+            if (Favorites is null)
+            {
+                ProblemContent = await ProblemHandleHelper.ProblemHandle<List<FavoriteResponse>>(_appState.Favorites, _page);
+                IsLoadSucces = false;
+                return;
+            }
+            IsLoadSucces = true;
             OnPropertyChanged(nameof(Favorites));
+        }
+        if (e.PropertyName == nameof(AppState.User))
+        {
             OnPropertyChanged(nameof(UserName));
         }
     }
@@ -100,9 +127,9 @@ public partial class FavoritesPageViewModel : INotifyPropertyChanged
 
     async void ToAuthorization()
     {
-        if (_page is null) return;
+        if (_page is null || IsBusy == true || _appState?.User?.HttpError is System.Net.HttpStatusCode.BadGateway) return;
 
-        if (_appState.User is null)
+        if (_appState?.User is null)
         {
             await _navigation.NavigateToAuthorizationPageAsync(_page);
         }

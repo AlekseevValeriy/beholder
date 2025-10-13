@@ -5,19 +5,23 @@ namespace Beholder.Service;
 public class AppState : INotifyPropertyChanged
 {
     readonly IApiClient _apiClient;
-
     public ApiResponse<List<ChannelResponse>>? Channels { get; private set; }
     public ApiResponse<List<ChannelResponse>>? ChannelsQueryResult { get; private set; }
-    public ApiResponse<List<ScheduleResponse>>? Schedule { get; private set; }
     public ApiResponse<List<FavoriteResponse>>? Favorites { get; private set; }
     public ApiResponse<UserCreateResponse>? User { get; private set; }
-    public ApiResponse<ChannelResponse>? Channel { get; private set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public AppState(IApiClient apiClient)
+    public AppState(IDataLoaderService dataLoader, IApiClient apiClient)
     {
         _apiClient = apiClient;
+
+        UserRequest? userData = dataLoader.Load();
+
+        if (userData is not null)
+        {
+            Task.Run(async () => await GetUserAsync(userData.login, userData.password_hash));
+        }
     }
 
     async public Task LoadChannelsAsync()
@@ -33,26 +37,14 @@ public class AppState : INotifyPropertyChanged
         OnPropertyChanged(nameof(ChannelsQueryResult));
     }
 
-    async public Task LoadChannelAsync(Int32 id)
+    async public Task<ApiResponse<ChannelResponse>> LoadChannelAsync(Int32 id)
     {
-        Channel = await _apiClient.GetChannelAsync(id);
-        OnPropertyChanged(nameof(Channel));
+        return await _apiClient.GetChannelAsync(id);
     }
 
-    async public Task LoadScheduleAsync(Int32 programId, DateTime date)
+    async public Task<ApiResponse<List<ScheduleResponse>>> LoadScheduleAsync(Int32 programId, DateTime date)
     {
-        ApiResponse<List<ScheduleResponse>> result = await _apiClient.GetScheduleAsync(programId, date);
-
-        if (result.IsSuccess && result.Content is not null && Schedule is not null && Schedule.IsSuccess && Schedule.Content is not null)
-        {
-            Schedule.Content.AddRange(result.Content);                
-        }
-        else
-        {
-            Schedule = result;
-        }
-
-        OnPropertyChanged(nameof(Schedule));
+        return await _apiClient.GetScheduleAsync(programId, date);
     }
 
     async public Task LoadFavoritesAsync(Int32 userId)
@@ -66,9 +58,9 @@ public class AppState : INotifyPropertyChanged
         return await _apiClient.HasFavoriteAsync(userId, channelId);
     }
 
-    async public Task<ApiResponse<Boolean>> AddfavoriteAsync(Int32 programId, Int32 userId)
+    async public Task<ApiResponse<Boolean>> AddfavoriteAsync(Int32 channelId, Int32 userId)
     {
-        ApiResponse<Boolean> result = await _apiClient.AddFavoritesAsync(programId, userId);
+        ApiResponse<Boolean> result = await _apiClient.AddFavoritesAsync(channelId, userId);
 
         if (result.IsSuccess && result.Content)
         {
@@ -78,9 +70,9 @@ public class AppState : INotifyPropertyChanged
         return result;
     }
 
-    async public Task<ApiResponse<Boolean>> DeletefavoriteAsync(Int32 programId, Int32 userId)
+    async public Task<ApiResponse<Boolean>> DeletefavoriteAsync(Int32 channelId, Int32 userId)
     {
-        ApiResponse<Boolean> result = await _apiClient.DeleteFavoritesAsync(programId, userId);
+        ApiResponse<Boolean> result = await _apiClient.DeleteFavoritesAsync(channelId, userId);
 
         if (result.IsSuccess && result.Content)
         {
@@ -116,6 +108,7 @@ public class AppState : INotifyPropertyChanged
         String password_hash = Crypt.StringToSha256Hash(password);
 
         User = await _apiClient.AddUserAsync(login, password_hash);
+
         OnPropertyChanged(nameof(User));
     }
 
@@ -142,18 +135,6 @@ public class AppState : INotifyPropertyChanged
     {
         User = null;
         OnPropertyChanged(nameof(User));
-    }
-
-    public void ClearSchedule()
-    {
-        Schedule = null;
-        OnPropertyChanged(nameof(Schedule));
-    }
-
-    public void ClearChannel()
-    {
-        Channel = null;
-        OnPropertyChanged(nameof(Channel));
     }
 
     public void OnPropertyChanged([CallerMemberName] String prop = "")

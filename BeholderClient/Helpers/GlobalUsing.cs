@@ -9,3 +9,4 @@ global using Beholder.Models;
 global using Beholder.Service;
 global using Beholder.ViewModels;
 global using Beholder.Views;
+global using Beholder.Helpers;

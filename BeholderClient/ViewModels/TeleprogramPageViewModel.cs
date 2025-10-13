@@ -5,7 +5,7 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
     public readonly AppState appState;
 
     ContentPage? _page;
-    Int32 _channelId;
+    Int32 _channelId = -1;
     Boolean _tagsContains = false;
     Boolean _schudleContains = false;
     Boolean _isFavorite = false;
@@ -15,8 +15,62 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
     DateTime _futureDate = DateTime.Today.Date;
     ObservableCollection<ScheduleResponseGroup>? _groupedSchedules;
     Boolean _isAuthorized = false;
-    Boolean _isLoaded = false;
+    Boolean _isLoadSucces = false;
+    Boolean _isBusy = false;
+    Boolean _isFutureVisiable = true;
+    Boolean _isPastVisiable = true;
+    Problem _problemContent = Problem.None;
+    ChannelResponse? _channel;
+    ObservableCollection<ScheduleResponse>? _schedule;
 
+    public Boolean IsPastVisiable
+    {
+        get => _isPastVisiable;
+        set
+        {
+            if (value != _isPastVisiable)
+            {
+                _isPastVisiable = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    public Boolean IsFutureVisiable
+    {
+        get => _isFutureVisiable;
+        set
+        {
+            if (value != _isFutureVisiable)
+            {
+                _isFutureVisiable = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    public Boolean IsBusy
+    {
+        get => _isBusy;
+        set
+        {
+            if (value != _isBusy)
+            {
+                _isBusy = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    public Problem ProblemContent
+    {
+        get => _problemContent;
+        set
+        {
+            if (value != _problemContent)
+            {
+                _problemContent = value;
+                OnPropertyChanged();
+            }
+        }
+    }
     public String PastButtonText
     {
         get => _pastButtonText;
@@ -65,14 +119,14 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
             }
         }
     }
-    public Boolean IsLoaded
+    public Boolean IsLoadSucces
     {
-        get => _isLoaded;
+        get => _isLoadSucces;
         set
         {
-            if (value != _isLoaded)
+            if (value != _isLoadSucces)
             {
-                _isLoaded = value;
+                _isLoadSucces = value;
                 OnPropertyChanged();
             }
         }
@@ -114,12 +168,28 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
         }
     }
     public ChannelResponse? Channel
-    { 
-        get
+    {
+        get => _channel;
+        set
         {
-            if (appState.Channel is not null && appState.Channel.IsSuccess && appState.Channel.Content is not null)
-                return appState.Channel.Content;
-            return null;
+            if (value != _channel)
+            {
+                _channel = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    
+    public ObservableCollection<ScheduleResponse>? Schedule
+    {
+        get => _schedule;
+        set
+        {
+            if (value != _schedule)
+            {
+                _schedule = value;
+                OnPropertyChanged();
+            }
         }
     }
 
@@ -136,55 +206,49 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
         ClickFavoriteButtonCommand = new Command(ClickFavoriteButton);
 
         this.appState = appState;
-        this.appState.PropertyChanged += OnAppStatePropertyChanged;
-
-        if (this.appState.Channel == null)
-        {
-            Task.Run(async () => await this.appState.LoadChannelAsync(_channelId));
-            Task.Run(async () =>
-            {
-                if (appState.User is not null && appState.User.IsSuccess && appState.User.Content is not null)
-                {
-                    IsAuthorized = true;
-
-                    var result = await this.appState.hasFavoriteAsync(appState.User.Content.id, _channelId);
-                    if (result.IsSuccess) IsFavorite = result.Content;
-                }
-            });
-            Task.Run(() => AddSchudle(DateTime.Today, ScheduleLoadPosition.Just));
-        }
-
-        MoveNextFutureText();
-        MoveNextPastText();
-
-        if (GroupedSchedules is not null) SchudleContains = true;
     }
 
-    void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
+    public async void LoadData(Int32 channelId)
     {
-        if (e.PropertyName == nameof(AppState.Channel))
-        {
-            OnPropertyChanged(nameof(Channel));
+        _channelId = channelId;
 
-            if (Channel is null)
+        {
+            IsLoadSucces = true;
+            IsBusy = true;
+
+            var response = await appState.LoadChannelAsync(_channelId);
+
+            if (response is not null)
             {
-                IsLoaded = false;
-                return;
+                if (response.HasProblem)
+                {
+                    ProblemContent = await ProblemHandleHelper.ProblemHandle<ChannelResponse>(response, _page);
+                    IsLoadSucces = false;
+                }
+                else if (response.Content is not null)
+                {
+                    Channel = response.Content;
+                }
             }
 
-            TagsContaing = Channel.tags is null ? false : true;
-            IsLoaded = true;
+            IsBusy = false;
+
+            TagsContaing = Channel?.tags is not null && Channel.tags.Length > 0;
+            IsLoadSucces = true;
         }
-        if (e.PropertyName == nameof(AppState.Schedule))
-        {
-            if (appState.Schedule is null || appState.Schedule.HasProblem || appState.Schedule.Content is null)
-            {
-                SchudleContains = false;
-                return;
-            }
 
-            GroupedSchedules = new(appState.Schedule.Content.GroupBy(s => s.start_time.ToString("d")).Select(g => new ScheduleResponseGroup(g.Key, new(g))));
-            SchudleContains = true;
+        {
+            if (appState.User is not null && appState.User.IsSuccess && appState.User.Content is not null)
+            {
+                IsAuthorized = true;
+
+                var result = await appState.hasFavoriteAsync(appState.User.Content.id, _channelId);
+                if (result.IsSuccess) IsFavorite = result.Content;
+            }
+        }
+
+        {
+            AddSchudle(DateTime.Today, ScheduleLoadPosition.Just);
         }
     }
 
@@ -204,23 +268,27 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
     void MoveNextPastText()
     {
         _pastDate = _pastDate.AddDays(-1);
-        PastButtonText = $"Программы на {_pastDate.ToString("d")}";
+        PastButtonText = $"Программы на {_pastDate:dd.MM.yyyy}";
     }
 
     void MoveNextFutureText()
     {
         _futureDate = _futureDate.AddDays(1);
-        FutureButtonText = $"Программы на {_futureDate.ToString("d")}";
+        FutureButtonText = $"Программы на {_futureDate:dd.MM.yyyy}";
     }
 
     void PastButtonClick()
     {
+        // Проверка на валидность
+
         AddSchudle(_pastDate, ScheduleLoadPosition.Past);
 
         MoveNextPastText();
     }
     void FutureButtonClick()
     {
+        // Проверка на валидность
+
         AddSchudle(_futureDate, ScheduleLoadPosition.Future);
 
         MoveNextFutureText();
@@ -228,19 +296,63 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
 
     async void AddSchudle(DateTime date, ScheduleLoadPosition postion)
     {
-        await appState.LoadScheduleAsync(_channelId, date);
+        var response = await appState.LoadScheduleAsync(_channelId, date);
+
+        if (response is not null && response.IsSuccess && response.Content is not null && response.Content.Count > 0)
+        {
+            if (postion == ScheduleLoadPosition.Just)
+            {
+                _futureDate = DateTime.Today;
+                _pastDate = DateTime.Today;
+
+                MoveNextFutureText();
+                MoveNextPastText();
+
+                SchudleContains = true;
+            }
+
+            if (GroupedSchedules is null)
+            {
+                GroupedSchedules = new(response.Content
+                    .OrderBy(x => x.start_time)
+                    .GroupBy(s => s.start_time
+                    .ToString("d"))
+                    .Select(g => new ScheduleResponseGroup(g.Key, new(g))));
+            }
+            else
+            {
+                GroupedSchedules = new(GroupedSchedules
+                    .SelectMany(g => g)
+                    .ToList()
+                    .Concat(response.Content)
+                    .OrderBy(x => x.start_time)
+                    .GroupBy(s => s.start_time
+                    .ToString("d"))
+                    .Select(g => new ScheduleResponseGroup(g.Key, new(g))));
+            }
+        }
     }
 
-
-    public TeleprogramPageViewModel BindChannelId(Int32 channelId)
+    async void ClickFavoriteButton()
     {
-        _channelId = channelId;
-        return this;
-    }
-
-    void ClickFavoriteButton()
-    {
-        IsFavorite = !IsFavorite;
+        if (_channelId != -1 && appState.User is not null && appState.User.IsSuccess && appState.User.Content is not null)
+        {
+            switch (IsFavorite)
+            {
+                case true:
+                    {
+                        var response = await appState.DeletefavoriteAsync(_channelId, appState.User.Content.id);
+                        if (response.IsSuccess && response.Content == true) IsFavorite = false;
+                        break;
+                    }
+                case false:
+                    {
+                        var response = await appState.AddfavoriteAsync(_channelId, appState.User.Content.id);
+                        if (response.IsSuccess && response.Content == true) IsFavorite = true;
+                        break;
+                    }
+            }
+        }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

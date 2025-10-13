@@ -1,20 +1,7 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Coding_projects\\BeholderServer\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{4C073F49-9306-4DC4-8AF6-4CF2DC4877A9}|BeholderServer.csproj|d:\\coding_projects\\beholderserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4C073F49-9306-4DC4-8AF6-4CF2DC4877A9}|BeholderServer.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4C073F49-9306-4DC4-8AF6-4CF2DC4877A9}|BeholderServer.csproj|d:\\coding_projects\\beholderserver\\teleprogramdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4C073F49-9306-4DC4-8AF6-4CF2DC4877A9}|BeholderServer.csproj|solutionrelative:teleprogramdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4C073F49-9306-4DC4-8AF6-4CF2DC4877A9}|BeholderServer.csproj|d:\\coding_projects\\beholderserver\\models.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4C073F49-9306-4DC4-8AF6-4CF2DC4877A9}|BeholderServer.csproj|solutionrelative:models.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "WorkspaceRootPath": "D:\\Coding_projects\\beholder_git\\BeholderServer\\",
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -22,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 129,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,6 +37,10 @@
             },
             {
               "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
               "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             },
             {
@@ -59,47 +50,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "TeleprogramDB.cs",
-              "DocumentMoniker": "D:\\Coding_projects\\BeholderServer\\TeleprogramDB.cs",
-              "RelativeDocumentMoniker": "TeleprogramDB.cs",
-              "ToolTip": "D:\\Coding_projects\\BeholderServer\\TeleprogramDB.cs",
-              "RelativeToolTip": "TeleprogramDB.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-23T07:15:40.301Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Models.cs",
-              "DocumentMoniker": "D:\\Coding_projects\\BeholderServer\\Models.cs",
-              "RelativeDocumentMoniker": "Models.cs",
-              "ToolTip": "D:\\Coding_projects\\BeholderServer\\Models.cs",
-              "RelativeToolTip": "Models.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-21T15:15:29.315Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Coding_projects\\BeholderServer\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "D:\\Coding_projects\\BeholderServer\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-21T14:13:41.704Z",
-              "EditorCaption": ""
             }
           ]
         },

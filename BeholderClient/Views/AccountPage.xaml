@@ -15,8 +15,10 @@
     <Grid RowDefinitions="auto,*,auto">
         <Border
             Grid.Row="0"
-            BackgroundColor="{StaticResource Primary}"
-            HeightRequest="50">
+            BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                              Dark={StaticResource PrimaryDark}}"
+            HeightRequest="50"
+            Stroke="{StaticResource Primary}">
             <Grid Margin="6,0,6,0" ColumnDefinitions="auto,*">
                 <Button
                     Grid.Column="0"

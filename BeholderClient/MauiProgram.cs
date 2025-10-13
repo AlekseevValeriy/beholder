@@ -17,7 +17,13 @@ public static class MauiProgram
                 fonts.AddFont("SFProText-Regular.ttf", "SFProRegular");
                 fonts.AddFont("SFProText-Semibold.ttf", "SFProSemibold");
             });
+
+#if DEBUG
+        builder.Services.AddSingleton<IApiClient, MockApiClient>();
+#else
         builder.Services.AddSingleton<IApiClient, ApiClient>();
+#endif
+
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddSingleton<IDataLoaderService, DataLoaderService>();
         builder.Services.AddSingleton<AppState>();

@@ -8,33 +8,54 @@
     x:DataType="controls:Teleprogram">
     <Border
         Margin="12,8"
-        BackgroundColor="{StaticResource Surface}"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark=#2A2A2A}"
         HeightRequest="40"
-        Shadow="#bfbfbf 1 1"
         StrokeShape="RoundRectangle 6"
         StrokeThickness="0">
-        <Grid
-            Margin="12,6"
-            ColumnDefinitions="auto,auto,*"
-            ColumnSpacing="12"
-            VerticalOptions="Center">
-            <Label
-                Grid.Column="0"
-                x:DataType="controls:Teleprogram"
-                BindingContext="{x:Reference This}"
-                FontAttributes="Bold"
-                FontSize="16"
-                Text="{Binding Time}"
-                TextColor="#111" />
-            <Label
-                Grid.Column="1"
-                x:DataType="controls:Teleprogram"
-                BindingContext="{x:Reference This}"
-                FontSize="16"
-                LineBreakMode="TailTruncation"
-                MaxLines="1"
-                Text="{Binding Title}"
-                TextColor="#333" />
-        </Grid>
+        <Border.Shadow>
+            <OnPlatform x:TypeArguments="Shadow">
+                <On Platform="Android">
+                    <On.Value>
+                        <Shadow
+                            Brush="#10000000"
+                            Opacity="0.8"
+                            Radius="3" />
+                    </On.Value>
+                </On>
+                <On Platform="WinUI">
+                    <On.Value>
+                        <Shadow
+                            Brush="#22000000"
+                            Opacity="1.2"
+                            Radius="3" />
+                    </On.Value>
+                </On>
+            </OnPlatform>
+        </Border.Shadow>
+        <ScrollView Orientation="Horizontal">
+            <Grid
+                Margin="12,6"
+                ColumnDefinitions="auto,auto,*"
+                ColumnSpacing="12"
+                VerticalOptions="Center">
+                <Label
+                    Grid.Column="0"
+                    x:DataType="controls:Teleprogram"
+                    BindingContext="{x:Reference This}"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    Text="{Binding Time}"
+                       TextColor="{AppThemeBinding Light=#111, Dark=#B0C4FF}" />
+                <Label
+                    Grid.Column="1"
+                    x:DataType="controls:Teleprogram"
+                    BindingContext="{x:Reference This}"
+                    FontSize="16"
+                    LineBreakMode="TailTruncation"
+                    MaxLines="1"
+                    Text="{Binding Title}"
+                       TextColor="{AppThemeBinding Light=#333, Dark=#B0C4FF}" />
+            </Grid>
+        </ScrollView>
     </Border>
 </ContentView>

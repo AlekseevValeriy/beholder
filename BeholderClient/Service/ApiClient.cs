@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 
 using Flurl;
 
@@ -8,7 +9,7 @@ namespace Beholder.Service;
 
 public class ApiClient : IApiClient
 {
-    String Address { get; } = @"https://localhost:7293";
+    public static String Address { get; set; } = @"https://localhost:7293";
     HttpClient HttpClient { get; } = new HttpClient();
 
     async public Task<ApiResponse<Boolean>> IsActiveAsync()
@@ -19,12 +20,16 @@ public class ApiClient : IApiClient
 
             HttpResponseMessage response = await HttpClient.GetAsync(request);
 
-            if (response.StatusCode is OK) return new ApiResponse<Boolean>(true);
-            else return new ApiResponse<Boolean>(response.StatusCode);
+            if (response.StatusCode is OK) return new (true);
+            else return new (response.StatusCode);
+        }
+        catch (HttpRequestException)
+        {
+            return new (BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<Boolean>(ex);
+            return new (ex);
         }
     }
 
@@ -36,16 +41,20 @@ public class ApiClient : IApiClient
 
             HttpResponseMessage response = await HttpClient.GetAsync(request);
 
-            if (response.StatusCode is not OK) return new ApiResponse<List<ChannelResponse>>(response.StatusCode);
+            if (response.StatusCode is not OK) return new (response.StatusCode);
 
             String responseContent = await response.Content.ReadAsStringAsync();
 
             List<ChannelResponse>? result = JsonSerializer.Deserialize<List<ChannelResponse>>(responseContent);
-            return new ApiResponse<List<ChannelResponse>>(result is null ? [] : result);
+            return new (result is null ? [] : result);
+        }
+        catch (HttpRequestException)
+        {
+            return new (BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<List<ChannelResponse>>(ex);
+            return new (ex);
         }
     }
 
@@ -53,20 +62,24 @@ public class ApiClient : IApiClient
     {
         try
         {
-            String request = Url.Combine(Address, $"channels?id={id}");
+            String request = Url.Combine(Address, "channels", id.ToString());
 
             HttpResponseMessage response = await HttpClient.GetAsync(request);
 
-            if (response.StatusCode is not OK) return new ApiResponse<ChannelResponse>(response.StatusCode);
+            if (response.StatusCode is not OK) return new (response.StatusCode);
 
             String responseContent = await response.Content.ReadAsStringAsync();
 
             List<ChannelResponse>? result = JsonSerializer.Deserialize<List<ChannelResponse>>(responseContent);
-            return new ApiResponse<ChannelResponse>(result is null ? ChannelResponse.Empty : result.FirstOrDefault() ?? ChannelResponse.Empty);
+            return new (result is null ? ChannelResponse.Empty : result.FirstOrDefault() ?? ChannelResponse.Empty);
+        }
+        catch (HttpRequestException)
+        {
+            return new (BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<ChannelResponse>(ex);
+            return new (ex);
         }
     }
 
@@ -78,16 +91,20 @@ public class ApiClient : IApiClient
 
             HttpResponseMessage response = await HttpClient.GetAsync(request);
 
-            if (response.StatusCode is not OK) return new ApiResponse<List<ChannelResponse>>(response.StatusCode);
+            if (response.StatusCode is not OK) return new (response.StatusCode);
 
             String responseContent = await response.Content.ReadAsStringAsync();
 
             List<ChannelResponse>? result = JsonSerializer.Deserialize<List<ChannelResponse>>(responseContent);
-            return new ApiResponse<List<ChannelResponse>>(result is null ? [] : result);
+            return new (result is null ? [] : result);
+        }
+        catch (HttpRequestException)
+        {
+            return new (BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<List<ChannelResponse>>(ex);
+            return new (ex);
         }
     }
 
@@ -108,16 +125,20 @@ public class ApiClient : IApiClient
 
             HttpResponseMessage response = await HttpClient.PostAsync(request, content);
 
-            if (response.StatusCode is not OK) return new ApiResponse<List<ScheduleResponse>>(response.StatusCode);
+            if (response.StatusCode is not OK) return new (response.StatusCode);
 
             String responseContent = await response.Content.ReadAsStringAsync();
 
             List<ScheduleResponse>? result = JsonSerializer.Deserialize<List<ScheduleResponse>>(responseContent);
-            return new ApiResponse<List<ScheduleResponse>>(result is null ? [] : result);
+            return new (result is null ? [] : result);
+        }
+        catch (HttpRequestException)
+        {
+            return new(BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<List<ScheduleResponse>>(ex);
+            return new (ex);
         }
     }
 
@@ -125,20 +146,24 @@ public class ApiClient : IApiClient
     {
         try
         {
-            String request = Url.Combine(Address, $"favorites?userId={userId}");
+            String request = Url.Combine(Address, "favorites", userId.ToString());
 
             HttpResponseMessage response = await HttpClient.GetAsync(request);
 
-            if (response.StatusCode is not OK) return new ApiResponse<List<FavoriteResponse>>(response.StatusCode);
+            if (response.StatusCode is not OK) return new (response.StatusCode);
 
             String responseContent = await response.Content.ReadAsStringAsync();
 
             List<FavoriteResponse>? result = JsonSerializer.Deserialize<List<FavoriteResponse>>(responseContent);
-            return new ApiResponse<List<FavoriteResponse>>(result is null ? [] : result);
+            return new (result is null ? [] : result);
+        }
+        catch (HttpRequestException)
+        {
+            return new(BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<List<FavoriteResponse>>(ex);
+            return new (ex);
         }
     }
 
@@ -146,16 +171,20 @@ public class ApiClient : IApiClient
     {
         try
         {
-            String request = Url.Combine(Address, $"favorites?userId={userId}&channelId={channelId}");
+            String request = Url.Combine(Address, "favorites", userId.ToString(), channelId.ToString());
 
             HttpResponseMessage response = await HttpClient.GetAsync(request);
 
-            if (response.StatusCode is OK) return new ApiResponse<Boolean>(true);
-            else return new ApiResponse<Boolean>(response.StatusCode);
+            if (response.StatusCode is OK) return new (true);
+            else return new (response.StatusCode);
+        }
+        catch (HttpRequestException)
+        {
+            return new(BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<Boolean>(ex);
+            return new (ex);
         }
     }
 
@@ -175,12 +204,16 @@ public class ApiClient : IApiClient
 
             HttpResponseMessage response = await HttpClient.PutAsync(request, content);
 
-            if (response.StatusCode is OK) return new ApiResponse<Boolean>(true);
-            else return new ApiResponse<Boolean>(response.StatusCode);
+            if (response.StatusCode is OK) return new (true);
+            else return new (response.StatusCode);
+        }
+        catch (HttpRequestException)
+        {
+            return new(BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<Boolean>(ex);
+            return new (ex);
         }
     }
 
@@ -188,16 +221,20 @@ public class ApiClient : IApiClient
     {
         try
         {
-            String request = Url.Combine(Address, $"favorites?program_id={channelId}&user_id={userId}");
+            String request = Url.Combine(Address, $"favorites?channel_id={channelId}&user_id={userId}");
 
             HttpResponseMessage response = await HttpClient.DeleteAsync(request);
 
-            if (response.StatusCode is OK) return new ApiResponse<Boolean>(true);
-            else return new ApiResponse<Boolean>(response.StatusCode);
+            if (response.StatusCode is OK) return new (true);
+            else return new (response.StatusCode);
+        }
+        catch (HttpRequestException)
+        {
+            return new(BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<Boolean>(ex);
+            return new (ex);
         }
     }
 
@@ -205,20 +242,24 @@ public class ApiClient : IApiClient
     {
         try
         {
-            String request = Url.Combine(Address, $"users?login={login}&password={password_hash}");
+            String request = Url.Combine(Address, $"users?login={login}&password_hash={password_hash}");
 
             HttpResponseMessage response = await HttpClient.GetAsync(request);
 
-            if (response.StatusCode is not OK) return new ApiResponse<Int32>(response.StatusCode);
+            if (response.StatusCode is not OK) return new (response.StatusCode);
 
             String responseContent = await response.Content.ReadAsStringAsync();
 
             List<Int32>? result = JsonSerializer.Deserialize<List<Int32>>(responseContent);
-            return new ApiResponse<Int32>((result is null || result.Count == 0) ? -1 : result.First());
+            return new ((result is null || result.Count == 0) ? -1 : result.First());
+        }
+        catch (HttpRequestException)
+        {
+            return new(BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<Int32>(ex);
+            return new (ex);
         }
     }
 
@@ -236,16 +277,20 @@ public class ApiClient : IApiClient
 
             HttpResponseMessage response = await HttpClient.PutAsync(request, content);
 
-            if (response.StatusCode is not OK) return new ApiResponse<UserCreateResponse>(response.StatusCode);
+            if (response.StatusCode is not OK) return new (response.StatusCode);
 
             String responseContent = await response.Content.ReadAsStringAsync();
 
             List<UserCreateResponse>? result = JsonSerializer.Deserialize<List<UserCreateResponse>>(responseContent);
-            return new ApiResponse<UserCreateResponse>(result is null ? UserCreateResponse.Empty : result.FirstOrDefault() ?? UserCreateResponse.Empty);
+            return new (result is null ? UserCreateResponse.Empty : result.FirstOrDefault() ?? UserCreateResponse.Empty);
+        }
+        catch (HttpRequestException)
+        {
+            return new(BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<UserCreateResponse>(ex);
+            return new (ex);
         }
     }
 
@@ -253,16 +298,20 @@ public class ApiClient : IApiClient
     {
         try
         {
-            String request = Url.Combine(Address, $"users?login={login}&password={password_hash}&id={userId}");
+            String request = Url.Combine(Address, $"users?login={login}&password_hash={password_hash}&id={userId}");
 
             HttpResponseMessage response = await HttpClient.DeleteAsync(request);
 
-            if (response.StatusCode is OK) return new ApiResponse<Boolean>(true);
-            else return new ApiResponse<Boolean>(response.StatusCode);
+            if (response.StatusCode is OK) return new (true);
+            else return new (response.StatusCode);
+        }
+        catch (HttpRequestException)
+        {
+            return new(BadGateway);
         }
         catch (Exception ex)
         {
-            return new ApiResponse<Boolean>(ex);
+            return new (ex);
         }
     }
 }

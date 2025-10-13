@@ -4,19 +4,25 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Beholder.Controls"
+    xmlns:converters="clr-namespace:Beholder.Converters"
     xmlns:models="clr-namespace:Beholder.Models"
     xmlns:vm="clr-namespace:Beholder.ViewModels"
     x:DataType="vm:SearchPageViewModel">
-
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BooleanInverse x:Key="BooleanInverse" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Grid RowDefinitions="auto,*">
         <Border
             Grid.Row="0"
             Padding="10,6"
-            BackgroundColor="{StaticResource Primary}"
-            HeightRequest="50">
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                             Dark={StaticResource PrimaryDark}}"
+                HeightRequest="50"
+            Stroke="{StaticResource Primary}">
             <SearchBar
                 Grid.Column="0"
-                BackgroundColor="{StaticResource PrimaryLight}"
                 FontSize="14"
                 MinimumHeightRequest="30"
                 SearchCommand="{Binding SearchCommand}"
@@ -24,30 +30,33 @@
                 TextColor="{StaticResource PrimaryDarkText}" />
         </Border>
         <Grid Grid.Row="1">
-            <ScrollView Orientation="Vertical">
-                <VerticalStackLayout Margin="12">
-                    <CollectionView ItemsSource="{Binding ChannelsQueryResult}">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:ChannelResponse">
+            <Grid IsVisible="{Binding IsLoadSucces}">
+                <ScrollView IsVisible="{Binding IsBusy, Converter={StaticResource BooleanInverse}}" Orientation="Vertical">
+                    <VerticalStackLayout Margin="12">
+                        <CollectionView ItemsSource="{Binding ChannelsQueryResult}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:ChannelResponse">
 
-                                <controls:Channel
-                                    Title="{Binding name}"
-                                    ChannelId="{Binding id}"
-                                    Description="{Binding description}"
-                                    Image="{Binding icon_path}"
-                                    Number="{Binding number}"
-                                    Tags="{Binding tags}"
-                                    TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
+                                    <controls:Channel
+                                        Title="{Binding name}"
+                                        ChannelId="{Binding id}"
+                                        Description="{Binding description}"
+                                        Image="{Binding icon_path}"
+                                        Number="{Binding number}"
+                                        Tags="{Binding tags}"
+                                        TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
 
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-            </ScrollView>
-            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </ScrollView>
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Scale="1" />
+            </Grid>
+            <ContentView Content="{Binding ProblemContent}" IsVisible="{Binding IsLoadSucces, Converter={StaticResource BooleanInverse}}" />
         </Grid>
 
     </Grid>

@@ -2,6 +2,17 @@ namespace Beholder.Controls;
 
 public partial class Filter : ContentView
 {
+    static Color BackroundColorIdle = Application.Current?.RequestedTheme switch
+    { 
+        AppTheme.Dark => Color.FromArgb("#0358e6"),
+        AppTheme.Light or _ => Color.FromArgb("#E3F2FD")
+    };
+    static Color TextColorIdle = Application.Current?.RequestedTheme switch
+    { 
+        AppTheme.Dark => Color.FromArgb("#FFFFFF"),
+        AppTheme.Light or _ => Color.FromArgb("#0D47A1")
+    };
+
     public FilterMS StateMachine { get; private set; } = new();
     public Double ImageSize { get; } = 15;
 
@@ -35,9 +46,9 @@ public partial class Filter : ContentView
         {
             case FilterState.Idle:
                 {
-                    Background.BackgroundColor = Color.FromArgb("#E3F2FD");
+                    Background.BackgroundColor = BackroundColorIdle;
 
-                    TextLabel.TextColor = Color.FromArgb("#0D47A1");
+                    TextLabel.TextColor = TextColorIdle;
 
                     ArrowImage.IsVisible = false;
                     ArrowImage.WidthRequest = 0;
@@ -124,4 +135,9 @@ public class FilterData(String text, FilterState state)
     public String Text { get; } = text;
     public FilterState State { get; } = state;
 
+    public void Deconstruct(out FilterState state, out String text)
+    {
+        state = this.State;
+        text = this.Text;
+    }
 }

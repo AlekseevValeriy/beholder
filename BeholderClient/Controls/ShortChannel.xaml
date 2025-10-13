@@ -9,13 +9,28 @@
     x:DataType="controls:ShortChannel">
     <Border
         Margin="18,8"
-        BackgroundColor="{StaticResource Surface}"
-        StrokeShape="RoundRectangle 10">
+            BackgroundColor="{AppThemeBinding Light={StaticResource Surface},
+                                          Dark={StaticResource SurfaceDark}}"
+            StrokeShape="RoundRectangle 10">
         <Border.Shadow>
-            <Shadow
-                Brush="#22000000"
-                Opacity="1.2"
-                Radius="5" />
+            <OnPlatform x:TypeArguments="Shadow">
+                <On Platform="Android">
+                    <On.Value>
+                        <Shadow
+                            Brush="#10000000"
+                            Opacity="0.5"
+                            Radius="5" />
+                    </On.Value>
+                </On>
+                <On Platform="WinUI">
+                    <On.Value>
+                        <Shadow
+                            Brush="#22000000"
+                            Opacity="1.2"
+                            Radius="5" />
+                    </On.Value>
+                </On>
+            </OnPlatform>
         </Border.Shadow>
         <Grid
             Padding="12,6"
@@ -28,9 +43,9 @@
                 Aspect="AspectFit"
                 BindingContext="{x:Reference This}"
                 ErrorPlaceholder="nosignal.png"
-                HeightRequest="65"
+                HeightRequest="55"
                 Source="{Binding Image}"
-                WidthRequest="65" />
+                WidthRequest="55" />
             <Label
                 Grid.Column="1"
                 x:DataType="controls:ShortChannel"
@@ -40,8 +55,9 @@
                 LineBreakMode="TailTruncation"
                 MaxLines="1"
                 Text="{Binding Title}"
-                TextColor="{StaticResource PrimaryDark}"
-                VerticalOptions="Center" />
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryDark},
+  Dark={StaticResource PrimaryDarkText}}"
+                   VerticalOptions="Center" />
         </Grid>
         <Border.GestureRecognizers>
             <TapGestureRecognizer Tapped="OpenTeleprogramPage" />

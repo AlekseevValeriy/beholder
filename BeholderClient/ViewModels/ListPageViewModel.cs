@@ -6,7 +6,33 @@ public partial class ListPageViewModel : INotifyPropertyChanged
     readonly INavigationService _navigation;
     ContentPage? _page;
     Boolean _isBusy = false;
+    Boolean _isLoadSucces = true;
+    Problem _problemContent = Problem.None;
 
+    public Problem ProblemContent
+    {
+        get => _problemContent;
+        set
+        {
+            if (value != _problemContent)
+            {
+                _problemContent = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    public Boolean IsLoadSucces
+    {
+        get => _isLoadSucces;
+        set
+        {
+            if (value != _isLoadSucces)
+            {
+                _isLoadSucces = value;
+                OnPropertyChanged();
+            }
+        }
+    }
     public Boolean IsBusy
     {
         get => _isBusy;
@@ -42,18 +68,31 @@ public partial class ListPageViewModel : INotifyPropertyChanged
         _appState = appState;
         _appState.PropertyChanged += OnAppStatePropertyChanged;
 
-        if (_appState.Channels == null)
-        {
-            IsBusy = true;
-            Task.Run(async () => await _appState.LoadChannelsAsync());
-        }
+        if (_appState.Channels == null) LoadData();
     }
 
-    void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
+    async public void LoadData()
+    {
+        IsLoadSucces = true;
+        IsBusy = true;
+        ProblemContent = Problem.None;
+        await _appState.LoadChannelsAsync();
+    }
+
+    async void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(AppState.Channels))
         {
             IsBusy = false;
+
+            if (Channels is null)
+            {
+                ProblemContent = await ProblemHandleHelper.ProblemHandle<List<ChannelResponse>>(_appState.Channels, _page);
+                IsLoadSucces = false;
+                return;
+            }
+
+            IsLoadSucces = true;
             OnPropertyChanged(nameof(Channels));
         }
     }
@@ -68,61 +107,16 @@ public partial class ListPageViewModel : INotifyPropertyChanged
     {
         if (Channels is null) return;
 
-
-        switch (data.State)
+        _appState.SetChannels((data switch
         {
-            case FilterState.DescendingSort:
-                {
-                    switch (data.Text)
-                    {
-                        case "Номер":
-                            {
-                                _appState.SetChannels(Channels.OrderByDescending(channel => channel.number).ToList());
-                                break;
-                            }
-                        case "Название":
-                            {
-                                _appState.SetChannels(Channels.OrderByDescending(channel => channel.name).ToList());
-                                break;
-                            }
-                        case "Описание":
-                            {
-                                _appState.SetChannels(Channels.OrderByDescending(channel => channel.description).ToList());
-                                break;
-                            }
-                    }
-                    break;
-                }
-            case FilterState.AscendingSort:
-                {
-                    switch (data.Text)
-                    {
-                        case "Номер":
-                            {
-                                _appState.SetChannels(Channels.OrderBy(channel => channel.number).ToList());
-                                break;
-                            }
-                        case "Название":
-                            {
-                                _appState.SetChannels(Channels.OrderBy(channel => channel.name).ToList());
-                                break;
-                            }
-                        case "Описание":
-                            {
-                                _appState.SetChannels(Channels.OrderBy(channel => channel.description).ToList());
-                                break;
-                            }
-                    }
-                    break;
-                }
-            case FilterState.Idle:
-                {
-                    _appState.SetChannels(Channels.OrderBy(channel => channel.number).ToList());
-                    break;
-                }
-            default: { break; }
-        }
-
+            (FilterState.DescendingSort, "Номер") => Channels.OrderByDescending(channel => channel.number),
+            (FilterState.DescendingSort, "Название") => Channels.OrderByDescending(channel => channel.name),
+            (FilterState.DescendingSort, "Описание") => Channels.OrderByDescending(channel => channel.description),
+            (FilterState.AscendingSort, "Номер") or (FilterState.Idle, _) => Channels.OrderBy(channel => channel.number),
+            (FilterState.AscendingSort, "Название") => Channels.OrderBy(channel => channel.name),
+            (FilterState.AscendingSort, "Описание") => Channels.OrderBy(channel => channel.description),
+            _ => Channels.Order()
+        }).ToList());
     }
 
     async void OpenTeleprogramPage(Int32 channelId)

@@ -1,26 +1,55 @@
-﻿namespace Beholder.Service;
+﻿using System.Net.Http.Json;
+
+using Microsoft.Maui.Storage;
+
+namespace Beholder.Service;
 internal class DataLoaderService : IDataLoaderService
 {
-    readonly String path = "..\\..\\..\\..\\Assets\\user.json";
+    readonly String appDataDirectory = FileSystem.AppDataDirectory;
+    readonly String fileName = "user.json";
+
+    public String GetFilePath()
+    {
+        String appDataDirectory = FileSystem.AppDataDirectory;
+        return Path.Combine(appDataDirectory, fileName);
+    }
 
     public UserRequest? Load()
     {
-        using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
+        String path = GetFilePath();
+
+        if (!File.Exists(path))
         {
-            UserRequest? deserializeModels = JsonSerializer.Deserialize<UserRequest>(fs);
-            if (deserializeModels is not null)
-            {
-                return deserializeModels;
-            }
+            File.WriteAllText(path, JsonSerializer.Serialize(new UserRequest("", "")));
+            return null;
+        }
+
+        try
+        {
+            String jsonString = File.ReadAllText(path);
+            UserRequest? deserializeModels = JsonSerializer.Deserialize<UserRequest>(jsonString);
+            
+            return deserializeModels;
+        }
+        catch
+        {
             return null;
         }
     }
 
     public void Upload(String login, String password)
     {
-        using (FileStream fs = new FileStream(path, FileMode.Create))
+        String path = GetFilePath();
+
+        if (File.Exists(path))
         {
-            JsonSerializer.Serialize(fs, new UserRequest(login, password));
+            try
+            {
+                String jsonContent = JsonSerializer.Serialize(new UserRequest(login, password));
+
+                File.WriteAllText(path, jsonContent);
+            }
+            catch { }
         }
     }
 }

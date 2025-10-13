@@ -7,7 +7,33 @@ public partial class SearchPageViewModel : INotifyPropertyChanged
     ContentPage? _page;
     String _searchQuery = "";
     Boolean _isBusy = false;
-
+    Boolean _isLoadSucces = true;
+    Problem _problemContent = Problem.None;
+    
+    public Problem ProblemContent
+    {
+        get => _problemContent;
+        set
+        {
+            if (value != _problemContent)
+            {
+                _problemContent = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    public Boolean IsLoadSucces
+    {
+        get => _isLoadSucces;
+        set
+        {
+            if (value != _isLoadSucces)
+            {
+                _isLoadSucces = value;
+                OnPropertyChanged();
+            }
+        }
+    }
     public Boolean IsBusy
     {
         get => _isBusy;
@@ -61,11 +87,19 @@ public partial class SearchPageViewModel : INotifyPropertyChanged
 
     }
 
-    void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
+    async void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(AppState.ChannelsQueryResult))
         {
             IsBusy = false;
+
+            if (ChannelsQueryResult is null)
+            {
+                ProblemContent = await ProblemHandleHelper.ProblemHandle<List<ChannelResponse>>(_appState.ChannelsQueryResult, _page);
+                IsLoadSucces = false;
+                return;
+            }
+            IsLoadSucces = true;
             OnPropertyChanged(nameof(ChannelsQueryResult));
         }
     }
@@ -91,6 +125,8 @@ public partial class SearchPageViewModel : INotifyPropertyChanged
     async void Search()
     {
         IsBusy = true;
+        IsLoadSucces = true;
+        ProblemContent = Problem.None;
         await _appState.LoadChannelsByQueryAsync(SearchQuery);
     }
 }

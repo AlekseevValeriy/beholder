@@ -6,7 +6,8 @@ namespace BeholderServer;
 
 public class TeleprogramDB : DbContext
 {
-    const String SERVER = @"LAPTOP-O1SR6LRJ\MSSQLSERVER01";
+    const String SERVER = @"LAPTOP-O1SR6LRJ\SQLEXPRESS";
+    //const String SERVER = @"localhost\SQLEXPRESS";
     const String DATABASE = @"Teleprogram";
 
     public TeleprogramDB(DbContextOptions<TeleprogramDB> options) : base(options) { }

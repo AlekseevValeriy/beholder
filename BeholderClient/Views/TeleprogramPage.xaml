@@ -22,8 +22,10 @@
         <Border
             Grid.Row="0"
             Padding="6,0,6,0"
-            BackgroundColor="{StaticResource Primary}"
-            HeightRequest="50">
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                             Dark={StaticResource PrimaryDark}}"
+                HeightRequest="50"
+            Stroke="{StaticResource Primary}">
             <Grid ColumnDefinitions="auto,*,auto">
                 <Button
                     Grid.Column="0"
@@ -32,18 +34,23 @@
                     HeightRequest="35"
                     MinimumHeightRequest="35"
                     Text="Назад" />
+                <Border
+                    Grid.Column="1"
+                    Background="#00FFFFFF"
+                    StrokeThickness="0" />
                 <ImageButton
                     Grid.Column="2"
                     BackgroundColor="Transparent"
                     Command="{Binding ClickFavoriteButtonCommand}"
                     HeightRequest="30"
+                    WidthRequest="30"
                     IsVisible="{Binding IsAuthorized}"
                     MinimumHeightRequest="30"
                     Source="{Binding IsFavorite, Converter={StaticResource BooleanFavoriteToImage}}" />
             </Grid>
         </Border>
         <Grid Grid.Row="1">
-            <ScrollView IsVisible="{Binding IsLoaded}">
+            <ScrollView IsVisible="{Binding IsLoadSucces}">
                 <VerticalStackLayout Margin="12" Spacing="12">
                     <Grid ColumnDefinitions="auto,*" ColumnSpacing="24">
                         <ffimageloading:CachedImage
@@ -74,25 +81,7 @@
                         FontSize="16"
                         Text="{Binding Channel.description}"
                         TextColor="#666" />
-                    <Border
-                        BackgroundColor="Transparent"
-                        HeightRequest="25"
-                        IsVisible="{Binding TagsContaing}"
-                        StrokeThickness="0" />
-                    <Line
-                        HorizontalOptions="Center"
-                        IsVisible="{Binding TagsContaing}"
-                        Stroke="#1A000000"
-                        StrokeThickness="2"
-                        X1="0"
-                        X2="250"
-                        Y1="0"
-                        Y2="0" />
-                    <Border
-                        BackgroundColor="Transparent"
-                        HeightRequest="25"
-                        IsVisible="{Binding TagsContaing}"
-                        StrokeThickness="0" />
+                    <controls:Separator IsVisible="{Binding TagsContaing}" />
                     <Border
                         Grid.Row="2"
                         Grid.Column="0"
@@ -115,36 +104,19 @@
                         </CollectionView>
                     </Border>
 
-                    <Border
-                        BackgroundColor="Transparent"
-                        HeightRequest="25"
-                        IsVisible="{Binding SchudleContains}"
-                        StrokeThickness="0" />
-                    <Line
-                        HorizontalOptions="Center"
-                        IsVisible="{Binding SchudleContains}"
-                        Stroke="#1A000000"
-                        StrokeThickness="2"
-                        X1="0"
-                        X2="250"
-                        Y1="0"
-                        Y2="0" />
-                    <Border
-                        BackgroundColor="Transparent"
-                        HeightRequest="25"
-                        IsVisible="{Binding SchudleContains}"
-                        StrokeThickness="0" />
+                    <controls:Separator IsVisible="{Binding SchudleContains}" />
 
-                    <VerticalStackLayout Spacing="6">
+                    <VerticalStackLayout Spacing="6"
+                                         IsVisible="{Binding SchudleContains}">
                         <Button
                             Command="{Binding PastButtonClickCommand}"
                             HeightRequest="40"
-                            IsVisible="{Binding SchudleContains}"
+                            IsVisible="{Binding IsPastVisiable}"
                             Text="{Binding PastButtonText}"
                             WidthRequest="250" />
                         <CollectionView
+                            Margin="0,12,0,12"
                             IsGrouped="True"
-                            IsVisible="{Binding SchudleContains}"
                             ItemsSource="{Binding GroupedSchedules}">
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout ItemSpacing="6" Orientation="Vertical" />
@@ -176,27 +148,13 @@
                         <Button
                             Command="{Binding FutureButtonClickCommand}"
                             HeightRequest="40"
-                            IsVisible="{Binding SchudleContains}"
+                            IsVisible="{Binding IsFutureVisiable}"
                             Text="{Binding FutureButtonText}"
                             WidthRequest="250" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </ScrollView>
-            <Grid IsVisible="{Binding IsLoaded, Converter={StaticResource BooleanInverse}}">
-                <VerticalStackLayout
-                    HorizontalOptions="Center"
-                    Spacing="12"
-                    VerticalOptions="Center">
-                    <Image
-                        HeightRequest="60"
-                        Source="problem.png"
-                        WidthRequest="60" />
-                    <Label
-                        FontSize="14"
-                        Text="Не удалось загрузить страницу"
-                        TextColor="{StaticResource Primary}" />
-                </VerticalStackLayout>
-            </Grid>
+            <controls:Problem IsVisible="{Binding IsLoadSucces, Converter={StaticResource BooleanInverse}}" />
         </Grid>
 
     </Grid>

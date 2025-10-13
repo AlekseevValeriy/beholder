@@ -9,15 +9,13 @@ public class UserRequest
     [MaxLength(20)]
     public String login { get; set; }
     [Required]
-    [MinLength(8)]
-    [MaxLength(50)]
-    public String password { get; set; }
+    public String password_hash { get; set; }
 
     [JsonConstructor]
-    public UserRequest(String login, String password)
+    public UserRequest(String login, String password_hash)
     {
         this.login = login;
-        this.password = password;
+        this.password_hash = password_hash;
     }
 }
 

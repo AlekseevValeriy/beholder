@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dVid9Q/rLXM=",
+  "dgSpecHash": "GTzAGNs6bzA=",
   "success": true,
-  "projectFilePath": "D:\\Coding_projects\\BeholderServer\\BeholderServer.csproj",
+  "projectFilePath": "D:\\Coding_projects\\beholder_git\\BeholderServer\\BeholderServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\valer\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\valer\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

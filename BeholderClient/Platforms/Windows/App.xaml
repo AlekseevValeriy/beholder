@@ -4,4 +4,4 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Beholder.WinUI"
     xmlns:maui="using:Microsoft.Maui"
-    RequestedTheme="Light" />
+    RequestedTheme="Dark" />

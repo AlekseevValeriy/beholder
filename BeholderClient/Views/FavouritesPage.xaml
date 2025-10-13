@@ -4,15 +4,23 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Beholder.Controls"
+    xmlns:converters="clr-namespace:Beholder.Converters"
     xmlns:models="clr-namespace:Beholder.Models"
     xmlns:vm="clr-namespace:Beholder.ViewModels"
     Title="favoritesPage"
     x:DataType="vm:FavoritesPageViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BooleanInverse x:Key="BooleanInverse" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Grid RowDefinitions="auto,*">
         <Border
             Grid.Row="0"
-            BackgroundColor="{StaticResource Primary}"
-            HeightRequest="50">
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                             Dark={StaticResource PrimaryDark}}"
+                HeightRequest="50"
+            Stroke="{StaticResource Primary}">
             <Grid Margin="12,0,6,0" ColumnDefinitions="auto,*,auto">
                 <HorizontalStackLayout Grid.Column="0">
                     <Image
@@ -30,28 +38,34 @@
             </Grid>
         </Border>
         <Grid Grid.Row="1">
-            <ScrollView Orientation="Vertical">
-                <VerticalStackLayout Margin="12">
-                    <CollectionView ItemsSource="{Binding Favorites}">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:FavoriteResponse">
+            <Grid IsVisible="{Binding IsLoadSucces}">
+                <ScrollView IsVisible="{Binding IsBusy, Converter={StaticResource BooleanInverse}}" Orientation="Vertical">
+                    <VerticalStackLayout Margin="12">
+                        <CollectionView ItemsSource="{Binding Favorites}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:FavoriteResponse">
 
-                                <controls:ShortChannel
-                                    Title="{Binding name}"
-                                    ChannelId="{Binding id}"
-                                    Image="{Binding icon_path}"
-                                    TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
+                                    <controls:ShortChannel
+                                        Title="{Binding name}"
+                                        ChannelId="{Binding id}"
+                                        Image="{Binding icon_path}"
+                                        TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
 
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-            </ScrollView>
-            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </ScrollView>
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    Scale="1" />
+            </Grid>
+            <ContentView Content="{Binding ProblemContent}" IsVisible="{Binding IsLoadSucces, Converter={StaticResource BooleanInverse}}" />
+
         </Grid>
-
     </Grid>
 </ContentPage>

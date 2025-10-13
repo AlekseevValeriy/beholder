@@ -8,7 +8,7 @@ public class StringTagsToList : IValueConverter
     {
         List<String> list = new();
 
-        if (value is null || value is not String svalue) return list;
+        if (value is null || value is not String svalue || svalue == "") return list;
 
         list.AddRange(svalue.Split(","));
 

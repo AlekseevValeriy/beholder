@@ -8,20 +8,22 @@
     x:DataType="controls:Tag">
     <Border
         Margin="0,0,6,6"
-        BackgroundColor="{StaticResource PrimaryLight}"
+            BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark=#2A2A2A}"
         HeightRequest="30"
         Stroke="Transparent"
         StrokeShape="RoundRectangle 4"
         StrokeThickness="0">
-        <Label
-            Padding="6,2"
-            x:DataType="controls:Tag"
-            BindingContext="{x:Reference This}"
-            FontSize="16"
-            HorizontalOptions="Center"
-            MaxLines="1"
-            Text="{Binding Text}"
-            TextColor="{StaticResource Primary}"
-            VerticalOptions="Center" />
+        <ScrollView HorizontalOptions="Center" Orientation="Horizontal">
+            <Label
+                Padding="6,2"
+                x:DataType="controls:Tag"
+                BindingContext="{x:Reference This}"
+                FontSize="16"
+                HorizontalOptions="Center"
+                MaxLines="1"
+                Text="{Binding Text}"
+                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark=#B0C4FF}"
+                   VerticalOptions="Center" />
+        </ScrollView>
     </Border>
 </ContentView>

@@ -68,17 +68,18 @@ public partial class AuthorizationPageViewModel : INotifyPropertyChanged
     {
         await _appState.GetUserAsync(Login, Password);
 
-        if (_appState.User is null || _appState.User.HasProblem || _appState.User.Content is null || _page is null) return;
-
-        _dataLoader.Upload(_appState.User.Content.login, _appState.User.Content.password);
-
-        await _navigation.NavigateToAccountPageAsync(_page);
+        AccountEnter();
     }
 
     async void Registration()
     {
         await _appState.AddUserAsync(Login, Password);
 
+        AccountEnter();
+    }
+
+    async void AccountEnter()
+    {
         if (_appState.User is null || _appState.User.HasProblem || _appState.User.Content is null || _page is null) return;
 
         _dataLoader.Upload(_appState.User.Content.login, _appState.User.Content.password);

@@ -200,6 +200,8 @@ namespace BeholderServer
 
                 db.Favorites.Remove(await result.FirstAsync());
 
+                await db.SaveChangesAsync();
+
                 return Ok();
             });
 

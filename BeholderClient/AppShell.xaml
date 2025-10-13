@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:Beholder.Views"
     Title="Beholder">
 
+    
     <TabBar>
         <Tab
             x:Name="list"
