@@ -37,15 +37,7 @@ public partial class Channel : ContentView
         set => SetValue(ImageProperty, value);
     }
 
-    public static readonly BindableProperty TagsProperty = BindableProperty.Create(nameof(Tags), typeof(String), typeof(Channel), default(String), propertyChanged: (BindableObject bindable, object oldValue, object newValue) =>
-    {
-        if (bindable is not Channel control || newValue is not String tags || tags == "") return;
-
-        foreach (String tag in tags.Split(","))
-        {
-            control.TagsLayout.Add(new Tag() { Text = tag });
-        }
-    });
+    public static readonly BindableProperty TagsProperty = BindableProperty.Create(nameof(Tags), typeof(String), typeof(Channel), default(String));
     public String Tags
     {
         get => (String)GetValue(TagsProperty);

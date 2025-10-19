@@ -1,24 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\Coding_projects\\beholder_git\\BeholderClient\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{02BFD048-12EE-4E72-8447-986E3E489A7B}|BeholderClient.csproj|d:\\coding_projects\\beholder_git\\beholderclient\\viewmodels\\teleprogrampageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{02BFD048-12EE-4E72-8447-986E3E489A7B}|BeholderClient.csproj|solutionrelative:viewmodels\\teleprogrampageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{02BFD048-12EE-4E72-8447-986E3E489A7B}|BeholderClient.csproj|d:\\coding_projects\\beholder_git\\beholderclient\\service\\appstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{02BFD048-12EE-4E72-8447-986E3E489A7B}|BeholderClient.csproj|solutionrelative:service\\appstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{02BFD048-12EE-4E72-8447-986E3E489A7B}|BeholderClient.csproj|d:\\coding_projects\\beholder_git\\beholderclient\\service\\apiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{02BFD048-12EE-4E72-8447-986E3E489A7B}|BeholderClient.csproj|solutionrelative:service\\apiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{02BFD048-12EE-4E72-8447-986E3E489A7B}|BeholderClient.csproj|d:\\coding_projects\\beholder_git\\beholderclient\\viewmodels\\authorizationpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{02BFD048-12EE-4E72-8447-986E3E489A7B}|BeholderClient.csproj|solutionrelative:viewmodels\\authorizationpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -26,60 +9,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 32,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": -1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AppState.cs",
-              "DocumentMoniker": "D:\\Coding_projects\\beholder_git\\BeholderClient\\Service\\AppState.cs",
-              "RelativeDocumentMoniker": "Service\\AppState.cs",
-              "ToolTip": "D:\\Coding_projects\\beholder_git\\BeholderClient\\Service\\AppState.cs",
-              "RelativeToolTip": "Service\\AppState.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAowCAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T19:30:31.748Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ApiClient.cs",
-              "DocumentMoniker": "D:\\Coding_projects\\beholder_git\\BeholderClient\\Service\\ApiClient.cs",
-              "RelativeDocumentMoniker": "Service\\ApiClient.cs",
-              "ToolTip": "D:\\Coding_projects\\beholder_git\\BeholderClient\\Service\\ApiClient.cs",
-              "RelativeToolTip": "Service\\ApiClient.cs",
-              "ViewState": "AgIAANEAAAAAAAAAAAAkwOcAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T19:30:39.035Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "TeleprogramPageViewModel.cs",
-              "DocumentMoniker": "D:\\Coding_projects\\beholder_git\\BeholderClient\\ViewModels\\TeleprogramPageViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModels\\TeleprogramPageViewModel.cs",
-              "ToolTip": "D:\\Coding_projects\\beholder_git\\BeholderClient\\ViewModels\\TeleprogramPageViewModel.cs",
-              "RelativeToolTip": "ViewModels\\TeleprogramPageViewModel.cs",
-              "ViewState": "AgIAAD0BAAAAAAAAAAAkwFMBAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T19:03:00.126Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AuthorizationPageViewModel.cs",
-              "DocumentMoniker": "D:\\Coding_projects\\beholder_git\\BeholderClient\\ViewModels\\AuthorizationPageViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModels\\AuthorizationPageViewModel.cs",
-              "ToolTip": "D:\\Coding_projects\\beholder_git\\BeholderClient\\ViewModels\\AuthorizationPageViewModel.cs",
-              "RelativeToolTip": "ViewModels\\AuthorizationPageViewModel.cs",
-              "ViewState": "AgIAADAAAAAAAAAAAAAmwEsAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T18:21:55.141Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{25f7e850-ffa1-11d0-b63f-00a0c922e851}"
@@ -114,11 +45,19 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+              "Name": "ST:4:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:5:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             }
           ]
         },

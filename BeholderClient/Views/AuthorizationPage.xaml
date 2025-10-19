@@ -4,13 +4,18 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:Beholder.ViewModels"
+    xmlns:converters="clr-namespace:Beholder.Converters"
     Title="AuthorizationPage"
     x:DataType="vm:AuthorizationPageViewModel">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:BooleanValidToColor x:Key="BooleanValidToColor" />
+        </ResourceDictionary>
+    </ContentView.Resources>
     <Grid RowDefinitions="auto,*,auto">
         <Border
             Grid.Row="0"
-            BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
-                                             Dark={StaticResource PrimaryDark}}"
+            BackgroundColor="{StaticResource Primary}"
             HeightRequest="50"
             Stroke="{StaticResource Primary}">
             <Grid Margin="6,0,6,0" ColumnDefinitions="auto,*">
@@ -29,10 +34,17 @@
             <VerticalStackLayout Spacing="12">
                 <Label HorizontalOptions="Start" Text="Логин" />
                 <Entry Placeholder="Логин..." Text="{Binding Login}" />
+                <Label Text="От 3 до 16 символов" FontSize="12"
+                       HorizontalOptions="Start" TextColor="{Binding LoginIsValid, Converter={StaticResource BooleanValidToColor}}"/>
             </VerticalStackLayout>
             <VerticalStackLayout Spacing="12">
                 <Label HorizontalOptions="Start" Text="Пароль" />
-                <Entry Placeholder="Пароль..." Text="{Binding Password}" />
+                <Entry Placeholder="Пароль..."
+                       Text="{Binding Password}" />
+                <Label Text="От 8 до 20 символов"
+                       FontSize="12"
+                       HorizontalOptions="Start"
+                       TextColor="{Binding PasswordIsValid, Converter={StaticResource BooleanValidToColor}}" />
             </VerticalStackLayout>
 
         </VerticalStackLayout>
@@ -42,14 +54,14 @@
             HeightRequest="60"
             StrokeThickness="0">
             <Grid Margin="6,0,6,0" ColumnDefinitions="auto,*,auto">
-                <Button
-                    Grid.Column="0"
+                <Button BackgroundColor="{StaticResource Primary}"
+                        Grid.Column="0"
                     Command="{Binding RegistrationCommand}"
                     HeightRequest="40"
                     Text="Регистрация"
                     WidthRequest="150" />
-                <Button
-                    Grid.Column="2"
+                <Button BackgroundColor="{StaticResource Primary}"
+                        Grid.Column="2"
                     Command="{Binding AuthorizationCommand}"
                     HeightRequest="40"
                     Text="Вход"

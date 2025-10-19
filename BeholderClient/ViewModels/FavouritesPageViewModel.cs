@@ -66,11 +66,13 @@ public partial class FavoritesPageViewModel : INotifyPropertyChanged
 
     public ICommand ToAuthorizationCommand { get; set; }
     public ICommand OpenTeleprogramPageCommand { get; set; }
+    public ICommand LoadDataCommand { get; set; }
 
     public FavoritesPageViewModel(IDataLoaderService dataLoader, INavigationService navigationService, AppState appState)
     {
         ToAuthorizationCommand = new Command(ToAuthorization);
         OpenTeleprogramPageCommand = new Command<Int32>(OpenTeleprogramPage);
+        LoadDataCommand = new Command(LoadData);
 
         _navigation = navigationService;
         _appState = appState;
@@ -91,7 +93,7 @@ public partial class FavoritesPageViewModel : INotifyPropertyChanged
         await _appState.LoadFavoritesAsync(id);
     }
 
-    async void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
+    void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(AppState.Favorites))
         {
@@ -99,8 +101,9 @@ public partial class FavoritesPageViewModel : INotifyPropertyChanged
 
             if (Favorites is null)
             {
-                ProblemContent = await ProblemHandleHelper.ProblemHandle<List<FavoriteResponse>>(_appState.Favorites, _page);
+                ProblemContent = ProblemHandleHelper.ProblemHandle<List<FavoriteResponse>>(_appState.Favorites);
                 IsLoadSucces = false;
+                //_appState.Favorites.DisplayProblem(_page);
                 return;
             }
             IsLoadSucces = true;
@@ -127,9 +130,13 @@ public partial class FavoritesPageViewModel : INotifyPropertyChanged
 
     async void ToAuthorization()
     {
-        if (_page is null || IsBusy == true || _appState?.User?.HttpError is System.Net.HttpStatusCode.BadGateway) return;
+        if (_appState is null || _page is null || IsBusy == true || _appState?.User?.HttpError is System.Net.HttpStatusCode.BadGateway) return;
 
-        if (_appState?.User is null)
+        var isActive = await _appState!.IsActiveAsync();
+
+        if (isActive is null || isActive.HasProblem || isActive.Content == false) return;
+
+        if (_appState is null || _appState.User is null || _appState.User.HasProblem || _appState.User.Content is null || _appState.User.Content.id == -1)
         {
             await _navigation.NavigateToAuthorizationPageAsync(_page);
         }

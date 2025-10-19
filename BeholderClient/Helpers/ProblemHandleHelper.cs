@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Beholder.Helpers;
 public class ProblemHandleHelper
 {
-    async public static Task<Problem> ProblemHandle<T>(ApiResponse<T>? responseData, ContentPage? page)
+    public static Problem ProblemHandle<T>(ApiResponse<T>? responseData)
     {
         if (responseData is not null)
         {
@@ -18,13 +19,16 @@ public class ProblemHandleHelper
                     return responseData.HttpError switch
                     {
                         System.Net.HttpStatusCode.NotFound => Problem.NotFound,
-                        System.Net.HttpStatusCode.BadGateway => Problem.NoConnect,
+                        System.Net.HttpStatusCode.BadGateway or System.Net.HttpStatusCode.ServiceUnavailable => Problem.NoConnect,
                         _ => Problem.InternalError
                     };
                 }
-                else if (responseData.Exception is not null && page is not null)
+                else if (responseData.Exception is not null)
                 {
-                    //await page.DisplayAlert("Проблема: исключение", responseData.Exception.Message, "ОК");
+                    if  (responseData.Exception is AuthenticationException)
+                    {
+                        return Problem.NoAuth;
+                    }
                 }
             }
         }

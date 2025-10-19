@@ -89,7 +89,7 @@ public class IdRequest
 public class ScheduleRequest
 {
     [Required]
-    public Int32 program_id { get; set; }
+    public Int32 channel_id { get; set; }
     [Required]
     public DateTime date { get; set; }
 }
@@ -100,6 +100,15 @@ public class FavoriteRequest
     public Int32 channel_id { get; set; }
     [Required]
     public Int32 user_id { get; set; }
+}
+
+public class ScheduleItemDto
+{
+    //public Int32 id { get; set; }
+    public String program_title { get; set; }
+    public String channel_name { get; set; }
+    public DateTime start_time { get; set; }
+    public DateTime end_time { get; set; }
 }
 
 #pragma warning restore

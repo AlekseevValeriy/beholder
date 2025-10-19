@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BeholderClient")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+b4666ce326883f76a00a5a24a603d47586fe8783")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+e44cbe1574415518cf5887ffcb678c487f429754")]
 [assembly: System.Reflection.AssemblyProductAttribute("BeholderClient")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BeholderClient")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

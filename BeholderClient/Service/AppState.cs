@@ -1,5 +1,7 @@
 ﻿using Beholder.Helpers;
 
+using System.Security.Authentication;
+
 namespace Beholder.Service;
 
 public class AppState : INotifyPropertyChanged
@@ -24,6 +26,11 @@ public class AppState : INotifyPropertyChanged
         }
     }
 
+    async public Task<ApiResponse<Boolean>> IsActiveAsync()
+    {
+        return await _apiClient.IsActiveAsync();
+    }
+
     async public Task LoadChannelsAsync()
     {
         Channels = await _apiClient.GetChannelsAsync();
@@ -42,14 +49,23 @@ public class AppState : INotifyPropertyChanged
         return await _apiClient.GetChannelAsync(id);
     }
 
-    async public Task<ApiResponse<List<ScheduleResponse>>> LoadScheduleAsync(Int32 programId, DateTime date)
+    async public Task<ApiResponse<Boolean>> HasScheduleAsync(Int32 channelId, DateTime date)
     {
-        return await _apiClient.GetScheduleAsync(programId, date);
+        return await _apiClient.HasScheduleAsync(channelId, date);
+    }
+
+    async public Task<ApiResponse<List<ScheduleResponse>>> LoadScheduleAsync(Int32 channelId, DateTime date)
+    {
+        return await _apiClient.GetScheduleAsync(channelId, date);
     }
 
     async public Task LoadFavoritesAsync(Int32 userId)
     {
-        Favorites = await _apiClient.GetFavoritesAsync(userId);
+        if (userId != -1) Favorites = await _apiClient.GetFavoritesAsync(userId);
+        else
+        {
+            Favorites = new(new AuthenticationException());
+        }
         OnPropertyChanged(nameof(Favorites));
     }
 
@@ -92,11 +108,7 @@ public class AppState : INotifyPropertyChanged
         {
             User = new(response);
         }
-        else if (response.IsSuccess && response.Content == -1)
-        {
-
-        }
-        else
+        else if (response.IsSuccess && response.Content != -1)
         {
             User = new(new UserCreateResponse(response.Content, login, password));
         }
@@ -107,8 +119,16 @@ public class AppState : INotifyPropertyChanged
     {
         String password_hash = Crypt.StringToSha256Hash(password);
 
-        User = await _apiClient.AddUserAsync(login, password_hash);
+        ApiResponse<Int32> response = await _apiClient.AddUserAsync(login, password_hash);
 
+        if (response.HasProblem)
+        {
+            User = new(response);
+        }
+        else if (response.IsSuccess && response.Content != -1)
+        {
+            User = new(new UserCreateResponse(response.Content, login, password));
+        }
         OnPropertyChanged(nameof(User));
     }
 
@@ -135,6 +155,12 @@ public class AppState : INotifyPropertyChanged
     {
         User = null;
         OnPropertyChanged(nameof(User));
+    }
+
+    public void ClearFavorites()
+    {
+        Favorites = null;
+        OnPropertyChanged(nameof(Favorites));
     }
 
     public void OnPropertyChanged([CallerMemberName] String prop = "")

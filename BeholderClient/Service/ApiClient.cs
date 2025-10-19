@@ -1,7 +1,9 @@
-﻿using System.Net;
-using System.Text;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
 
 using Flurl;
+
+using System.Net;
+using System.Text;
 
 using static System.Net.HttpStatusCode;
 
@@ -108,8 +110,28 @@ public class ApiClient : IApiClient
         }
     }
 
+    async public Task<ApiResponse<Boolean>> HasScheduleAsync(Int32 channelId, DateTime date)
+    {
+        try
+        {
+            String request = Url.Combine(Address, "schedule", channelId.ToString(), date.ToString());
 
-    async public Task<ApiResponse<List<ScheduleResponse>>> GetScheduleAsync(Int32 programId, DateTime date)
+            HttpResponseMessage response = await HttpClient.GetAsync(request);
+
+            if (response.StatusCode is OK) return new(true);
+            else return new(response.StatusCode);
+        }
+        catch (HttpRequestException)
+        {
+            return new(BadGateway);
+        }
+        catch (Exception ex)
+        {
+            return new(ex);
+        }       
+    }
+
+    async public Task<ApiResponse<List<ScheduleResponse>>> GetScheduleAsync(Int32 channelId, DateTime date)
     {
         try
         {
@@ -117,7 +139,7 @@ public class ApiClient : IApiClient
 
             ScheduleRequest body = new()
             {
-                id = programId,
+                channel_id = channelId,
                 date = date
             };
 
@@ -263,7 +285,7 @@ public class ApiClient : IApiClient
         }
     }
 
-    async public Task<ApiResponse<UserCreateResponse>> AddUserAsync(String login, String password_hash)
+    async public Task<ApiResponse<Int32>> AddUserAsync(String login, String password_hash)
     {
         try
         {
@@ -281,8 +303,8 @@ public class ApiClient : IApiClient
 
             String responseContent = await response.Content.ReadAsStringAsync();
 
-            List<UserCreateResponse>? result = JsonSerializer.Deserialize<List<UserCreateResponse>>(responseContent);
-            return new (result is null ? UserCreateResponse.Empty : result.FirstOrDefault() ?? UserCreateResponse.Empty);
+            Int32? result = JsonSerializer.Deserialize<Int32>(responseContent);
+            return new (result is null ? -1 :(Int32)result);
         }
         catch (HttpRequestException)
         {

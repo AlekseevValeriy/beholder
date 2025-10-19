@@ -10,10 +10,10 @@ public partial class ListPage : ContentPage
         BindingContext = viewModel.BindPage(this);
         Shell.SetNavBarIsVisible(this, false);
 
-        //foreach (Filter item in FiltersLayout.Children.OfType<Filter>())
-        //{
-        //    _filterCoordinator.Register(item);
-        //}
+        foreach (Filter item in FiltersLayout.Children.OfType<Filter>())
+        {
+            _filterCoordinator.Register(item);
+        }
     }
 }
 

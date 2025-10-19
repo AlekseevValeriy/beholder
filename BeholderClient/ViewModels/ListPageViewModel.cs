@@ -58,11 +58,13 @@ public partial class ListPageViewModel : INotifyPropertyChanged
 
     public ICommand OpenTeleprogramPageCommand { get; set; }
     public ICommand ChannelSortCommand { get; set; }
+    public ICommand LoadDataCommand { get; set; }
 
     public ListPageViewModel(INavigationService navigation, AppState appState)
     {
         OpenTeleprogramPageCommand = new Command<Int32>(OpenTeleprogramPage);
         ChannelSortCommand = new Command<FilterData>(ChannelSort);
+        LoadDataCommand = new Command(LoadData);
 
         _navigation = navigation;
         _appState = appState;
@@ -79,7 +81,7 @@ public partial class ListPageViewModel : INotifyPropertyChanged
         await _appState.LoadChannelsAsync();
     }
 
-    async void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
+    void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(AppState.Channels))
         {
@@ -87,7 +89,7 @@ public partial class ListPageViewModel : INotifyPropertyChanged
 
             if (Channels is null)
             {
-                ProblemContent = await ProblemHandleHelper.ProblemHandle<List<ChannelResponse>>(_appState.Channels, _page);
+                ProblemContent = ProblemHandleHelper.ProblemHandle<List<ChannelResponse>>(_appState.Channels);
                 IsLoadSucces = false;
                 return;
             }

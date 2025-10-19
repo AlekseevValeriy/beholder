@@ -28,7 +28,7 @@ public class IdRequest
 public class ScheduleRequest
 {
     [Required]
-    public Int32 id { get; set; }
+    public Int32 channel_id { get; set; }
     [Required]
     public DateTime date { get; set; }
 }

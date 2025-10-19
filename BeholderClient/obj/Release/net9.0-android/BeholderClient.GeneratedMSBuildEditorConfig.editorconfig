@@ -36,6 +36,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Controls.Channel.
 build_metadata.AdditionalFiles.TargetPath = Controls\Channel.xaml
 build_metadata.AdditionalFiles.RelativePath = Controls\Channel.xaml
 
+[D:/Coding_projects/beholder_git/BeholderClient/Controls/ChannelImage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Controls.ChannelImage.xaml
+build_metadata.AdditionalFiles.TargetPath = Controls\ChannelImage.xaml
+build_metadata.AdditionalFiles.RelativePath = Controls\ChannelImage.xaml
+
 [D:/Coding_projects/beholder_git/BeholderClient/Controls/Filter.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Controls.Filter.xaml
@@ -71,6 +77,12 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Controls.Teleprogram.xaml
 build_metadata.AdditionalFiles.TargetPath = Controls\Teleprogram.xaml
 build_metadata.AdditionalFiles.RelativePath = Controls\Teleprogram.xaml
+
+[D:/Coding_projects/beholder_git/BeholderClient/Controls/Update.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Beholder.Controls.Update.xaml
+build_metadata.AdditionalFiles.TargetPath = Controls\Update.xaml
+build_metadata.AdditionalFiles.RelativePath = Controls\Update.xaml
 
 [D:/Coding_projects/beholder_git/BeholderClient/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

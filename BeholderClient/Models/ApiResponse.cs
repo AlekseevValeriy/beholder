@@ -70,5 +70,15 @@ namespace Beholder.Models
             content = response.IsSuccess ? response.Content : default;
             return response.IsSuccess && response.Content is not null;
         }
+
+        async public static void DisplayProblem<T>(this ApiResponse<T>? response, ContentPage? page)
+        {
+            if (page is null || response is null) return;
+ 
+            if (response.HttpError is not null) await page.DisplayAlert("Error", response.HttpError.ToString(), "Ok");
+            else if (response.Exception is not null) await page.DisplayAlert("Error", response.Exception.Message, "Ok");
+
+            
+        }
     }
 }

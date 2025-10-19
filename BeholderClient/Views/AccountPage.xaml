@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:Beholder.Converters"
     xmlns:vm="clr-namespace:Beholder.ViewModels"
+    xmlns:controls="clr-namespace:Beholder.Controls"
     Title="AccountPage"
     x:DataType="vm:AccountPageViewModel">
     <ContentPage.Resources>
@@ -15,17 +16,15 @@
     <Grid RowDefinitions="auto,*,auto">
         <Border
             Grid.Row="0"
-            BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
-                                              Dark={StaticResource PrimaryDark}}"
+            BackgroundColor="{StaticResource Primary}"
             HeightRequest="50"
             Stroke="{StaticResource Primary}">
             <Grid Margin="6,0,6,0" ColumnDefinitions="auto,*">
-                <Button
-                    Grid.Column="0"
-                    Command="{Binding ToBackCommand}"
-                    HeightRequest="30"
-                    MinimumHeightRequest="30"
-                    Text="Назад" />
+                <Button Grid.Column="0"
+                        Command="{Binding ToBackCommand}"
+                        HeightRequest="30"
+                        MinimumHeightRequest="30"
+                        Text="Назад" />
             </Grid>
         </Border>
         <VerticalStackLayout
@@ -70,14 +69,14 @@
             HeightRequest="60"
             StrokeThickness="0">
             <Grid Margin="6,0,6,0" ColumnDefinitions="auto,*,auto">
-                <Button
-                    Grid.Column="0"
+                <Button BackgroundColor="{StaticResource Primary}"
+                        Grid.Column="0"
                     Command="{Binding LogoutCommand}"
                     HeightRequest="40"
                     Text="Выйти"
                     WidthRequest="150" />
-                <Button
-                    Grid.Column="2"
+                <Button BackgroundColor="{StaticResource Primary}"
+                        Grid.Column="2"
                     Command="{Binding DeleteAccountCommand}"
                     HeightRequest="40"
                     Text="Удалить"

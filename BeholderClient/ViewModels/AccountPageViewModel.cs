@@ -87,21 +87,23 @@ public partial class AccountPageViewModel : INotifyPropertyChanged
     {
         _appState.ClearUser();
 
-        if (_appState.User is null)
-        {
-            _dataLoader.Upload("", "");
-
-            ToBack();
-        }
+        AccountLeave();
     }
 
     async void DeleteAccount()
     {
         await _appState.DeleteUserAsync();
 
+        AccountLeave();
+    }
+
+    void AccountLeave()
+    {
         if (_appState.User is null)
         {
             _dataLoader.Upload("", "");
+
+            _appState.ClearFavorites();
 
             ToBack();
         }

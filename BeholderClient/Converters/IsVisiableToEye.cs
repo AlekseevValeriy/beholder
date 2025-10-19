@@ -8,9 +8,9 @@ public class IsVisiableToEye : IValueConverter
     {
         if (value is null || value is not Boolean bvalue) return "";
 
-        if (bvalue) return "eye_close_primary.png";
+        if (bvalue) return "eye_close.png";
 
-        return "eye_open_primary.png";
+        return "eye_open.png";
     }
     public Object ConvertBack(Object? value, Type targetType, Object? parameter, CultureInfo culture) => throw new NotImplementedException();
 }

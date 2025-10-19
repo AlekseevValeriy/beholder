@@ -17,9 +17,8 @@
         <Border
             Grid.Row="0"
             Padding="10,6"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
-                                             Dark={StaticResource PrimaryDark}}"
-                HeightRequest="50"
+            BackgroundColor="{StaticResource Primary}"
+            HeightRequest="50"
             Stroke="{StaticResource Primary}">
             <SearchBar
                 Grid.Column="0"
@@ -27,34 +26,38 @@
                 MinimumHeightRequest="30"
                 SearchCommand="{Binding SearchCommand}"
                 Text="{Binding SearchQuery}"
-                TextColor="{StaticResource PrimaryDarkText}" />
+                TextColor="{AppThemeBinding Light={StaticResource BarTextLight},
+                                            Dark={StaticResource BarTextDark}}" />
         </Border>
         <Grid Grid.Row="1">
             <Grid IsVisible="{Binding IsLoadSucces}">
-                <ScrollView IsVisible="{Binding IsBusy, Converter={StaticResource BooleanInverse}}" Orientation="Vertical">
-                    <VerticalStackLayout Margin="12">
-                        <CollectionView ItemsSource="{Binding ChannelsQueryResult}">
-                            <CollectionView.ItemsLayout>
-                                <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:ChannelResponse">
+                <CollectionView
+                    Margin="12"
+                    IsVisible="{Binding IsBusy, Converter={StaticResource BooleanInverse}}"
+                    ItemsSource="{Binding ChannelsQueryResult}"
+                    VerticalScrollBarVisibility="Never">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ChannelResponse">
 
-                                    <controls:Channel
-                                        Title="{Binding name}"
-                                        ChannelId="{Binding id}"
-                                        Description="{Binding description}"
-                                        Image="{Binding icon_path}"
-                                        Number="{Binding number}"
-                                        Tags="{Binding tags}"
-                                        TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
+                            <controls:Channel
+                                Title="{Binding name}"
+                                ChannelId="{Binding id}"
+                                Description="{Binding description}"
+                                Image="{Binding icon_path}"
+                                Number="{Binding number}"
+                                Tags="{Binding tags}"
+                                TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
 
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </VerticalStackLayout>
-                </ScrollView>
-                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Scale="1" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    Scale="1" />
             </Grid>
             <ContentView Content="{Binding ProblemContent}" IsVisible="{Binding IsLoadSucces, Converter={StaticResource BooleanInverse}}" />
         </Grid>

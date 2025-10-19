@@ -9,10 +9,11 @@
     <Border
         x:Name="Background"
         Padding="10,4"
-            BackgroundColor="{AppThemeBinding Light=#E3F2FD, Dark={StaticResource PrimaryDark}}"
-            HeightRequest="30"
+        BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryLight}, Dark={StaticResource SecondaryDark}}"
+        HeightRequest="30"
         StrokeShape="RoundRectangle 12"
-        StrokeThickness="0">
+        Stroke="{AppThemeBinding Light={StaticResource SecondaryLight}, Dark={StaticResource SecondaryDark}}"
+        StrokeThickness="2">
         <Grid
             ColumnDefinitions="*,auto"
             HorizontalOptions="Center"
@@ -25,18 +26,17 @@
                 BindingContext="{x:Reference This}"
                 HeightRequest="{Binding ImageSize}"
                 IsVisible="False"
-                Source="arrow_black.png"
+                Source="{AppThemeBinding Light=arrow_light.png, Dark=arrow_dark.png}"
                 VerticalOptions="Center"
                 WidthRequest="{Binding ImageSize}" />
             <Label
                 x:Name="TextLabel"
                 Grid.Column="1"
                 x:DataType="controls:Filter"
-                BackgroundColor="Transparent"
                 BindingContext="{x:Reference This}"
                 FontSize="14"
                 Text="{Binding Text}"
-                TextColor="#FFFFFF"
+                TextColor="{AppThemeBinding Light={StaticResource FilterTextIdleLight}, Dark={StaticResource FilterTextIdleDark}}"
                 VerticalOptions="Center" />
 
         </Grid>

@@ -11,13 +11,13 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 
             </ResourceDictionary.MergedDictionaries>
-            <Color x:Key="Background">#FFFFFF</Color>
+            <Color x:Key="BackgroundLight">#FFFFFF</Color>
             <Color x:Key="BackgroundDark">#121212</Color>
 
             <Style TargetType="ContentPage"
                    ApplyToDerivedTypes="True">
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource BackgroundDark}}" />
+                        Value="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

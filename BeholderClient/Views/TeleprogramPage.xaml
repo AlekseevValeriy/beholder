@@ -22,9 +22,8 @@
         <Border
             Grid.Row="0"
             Padding="6,0,6,0"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
-                                             Dark={StaticResource PrimaryDark}}"
-                HeightRequest="50"
+            BackgroundColor="{StaticResource Primary}"
+            HeightRequest="50"
             Stroke="{StaticResource Primary}">
             <Grid ColumnDefinitions="auto,*,auto">
                 <Button
@@ -34,126 +33,154 @@
                     HeightRequest="35"
                     MinimumHeightRequest="35"
                     Text="Назад" />
-                <Border
-                    Grid.Column="1"
-                    Background="#00FFFFFF"
-                    StrokeThickness="0" />
                 <ImageButton
                     Grid.Column="2"
                     BackgroundColor="Transparent"
                     Command="{Binding ClickFavoriteButtonCommand}"
                     HeightRequest="30"
-                    WidthRequest="30"
                     IsVisible="{Binding IsAuthorized}"
                     MinimumHeightRequest="30"
-                    Source="{Binding IsFavorite, Converter={StaticResource BooleanFavoriteToImage}}" />
+                    Source="{Binding IsFavorite, Converter={StaticResource BooleanFavoriteToImage}}"
+                    WidthRequest="30" />
             </Grid>
         </Border>
         <Grid Grid.Row="1">
-            <ScrollView IsVisible="{Binding IsLoadSucces}">
-                <VerticalStackLayout Margin="12" Spacing="12">
-                    <Grid ColumnDefinitions="auto,*" ColumnSpacing="24">
-                        <ffimageloading:CachedImage
-                            Grid.Column="0"
-                            Aspect="AspectFit"
-                            ErrorPlaceholder="nosignal.png"
-                            HeightRequest="100"
-                            Source="{Binding Channel.icon_path}"
-                            WidthRequest="100" />
-                        <Label
-                            Grid.Column="1"
-                            FontAttributes="Bold"
-                            FontSize="24"
-                            HorizontalOptions="Start"
-                            Text="{Binding Channel.name}"
-                            TextColor="{StaticResource Primary}"
-                            VerticalOptions="Center" />
-                    </Grid>
-                    <Label
-                        Grid.Column="0"
-                        FontSize="16"
-                        Text="{Binding Path=Channel.number, StringFormat='Канал № {0}'}"
-                        TextColor="#444"
-                        VerticalOptions="Center" />
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        FontSize="16"
-                        Text="{Binding Channel.description}"
-                        TextColor="#666" />
-                    <controls:Separator IsVisible="{Binding TagsContaing}" />
-                    <Border
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        BackgroundColor="Transparent"
-                        StrokeThickness="0">
-                        <CollectionView ItemsSource="{Binding Channel.tags, Converter={StaticResource StringTagsToList}}">
-                            <CollectionView.ItemsLayout>
-                                <GridItemsLayout
-                                    HorizontalItemSpacing="6"
-                                    Orientation="Vertical"
-                                    Span="3"
-                                    VerticalItemSpacing="6" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="x:String">
-                                    <controls:Tag Text="{Binding}" />
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </Border>
+            <Grid IsVisible="{Binding IsLoadSucces}">
+                <CollectionView
+                    Margin="0,12,0,12"
+                    IsGrouped="True"
+                    IsVisible="{Binding IsBusy, Converter={StaticResource BooleanInverse}}"
+                    ItemsSource="{Binding GroupedSchedules}"
+                    ItemsUpdatingScrollMode="KeepScrollOffset"
+                    VerticalScrollBarVisibility="Never">
+                    <CollectionView.Header>
+                        <VerticalStackLayout Margin="12" Spacing="12">
+                            <Grid ColumnDefinitions="auto,*" ColumnSpacing="24">
+                                <ffimageloading:CachedImage
+                                    Grid.Column="0"
+                                    Aspect="AspectFit"
+                                    ErrorPlaceholder="no_signal.png"
+                                    HeightRequest="100"
+                                    Source="{Binding Channel.icon_path}"
+                                    WidthRequest="100" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontAttributes="Bold"
+                                    FontSize="24"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Channel.name}"
+                                    TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight},
+                                                                Dark={StaticResource PrimaryTextDark}}"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                            <Label
+                                Grid.Column="0"
+                                FontSize="18"
+                                Text="{Binding Path=Channel.number, StringFormat='{0} канал'}"
+                                TextColor="#444"
+                                VerticalOptions="Center" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                FontSize="18"
+                                Text="{Binding Channel.description}"
+                                TextColor="#666" />
+                            <controls:Separator IsVisible="{Binding TagsContaing}" />
+                            <Border
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                BackgroundColor="Transparent"
+                                StrokeThickness="0">
+                                <CollectionView ItemsSource="{Binding Channel.tags, Converter={StaticResource StringTagsToList}}">
+                                    <CollectionView.ItemsLayout>
+                                        <GridItemsLayout
+                                            HorizontalItemSpacing="6"
+                                            Orientation="Vertical"
+                                            Span="3"
+                                            VerticalItemSpacing="6" />
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="x:String">
+                                            <controls:Tag Text="{Binding}" />
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Border>
 
-                    <controls:Separator IsVisible="{Binding SchudleContains}" />
+                            <controls:Separator IsVisible="{Binding SchudleContains}" />
 
-                    <VerticalStackLayout Spacing="6"
-                                         IsVisible="{Binding SchudleContains}">
-                        <Button
-                            Command="{Binding PastButtonClickCommand}"
-                            HeightRequest="40"
-                            IsVisible="{Binding IsPastVisiable}"
-                            Text="{Binding PastButtonText}"
-                            WidthRequest="250" />
-                        <CollectionView
-                            Margin="0,12,0,12"
-                            IsGrouped="True"
-                            ItemsSource="{Binding GroupedSchedules}">
-                            <CollectionView.ItemsLayout>
-                                <LinearItemsLayout ItemSpacing="6" Orientation="Vertical" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.GroupHeaderTemplate>
-                                <DataTemplate x:DataType="models:ScheduleResponseGroup">
-                                    <VerticalStackLayout>
-                                        <Label
-                                            FontSize="16"
-                                            Text="{Binding Name}"
-                                            TextColor="{StaticResource Primary}" />
-                                        <Border
-                                            BackgroundColor="#1A000000"
-                                            HeightRequest="2"
-                                            Stroke="Transparent"
-                                            StrokeThickness="0" />
-                                    </VerticalStackLayout>
-                                </DataTemplate>
-                            </CollectionView.GroupHeaderTemplate>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:ScheduleResponse">
-                                    <controls:Teleprogram
-                                        Title="{Binding program_title}"
-                                        TimeEnd="{Binding end_time}"
-                                        TimeStart="{Binding start_time}" />
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                        <Button
-                            Command="{Binding FutureButtonClickCommand}"
-                            HeightRequest="40"
-                            IsVisible="{Binding IsFutureVisiable}"
-                            Text="{Binding FutureButtonText}"
-                            WidthRequest="250" />
-                    </VerticalStackLayout>
-                </VerticalStackLayout>
-            </ScrollView>
+                            <VerticalStackLayout IsVisible="{Binding SchudleContains}" Spacing="6">
+                                <Button
+                                    BackgroundColor="{StaticResource Primary}"
+                                    Command="{Binding PastButtonClickCommand}"
+                                    HeightRequest="40"
+                                    IsVisible="{Binding IsPastVisiable}"
+                                    Text="{Binding PastButtonText}"
+                                    WidthRequest="250" />
+                                <ActivityIndicator
+                                    HeightRequest="50"
+                                    IsRunning="{Binding IsPastBusy}"
+                                    IsVisible="{Binding IsPastBusy}"
+                                    WidthRequest="50" />
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </CollectionView.Header>
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="6" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate x:DataType="models:ScheduleResponseGroup">
+                            <VerticalStackLayout>
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="18"
+                                    Text="{Binding Name}"
+                                    TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                                                Dark={StaticResource TertiaryTextDark}}" />
+                                <Border
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource SeparatorLight},
+                                                                      Dark={StaticResource SeparatorDark}}"
+                                    HeightRequest="2"
+                                    Stroke="Transparent"
+                                    StrokeThickness="0" />
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ScheduleResponse">
+                            <controls:Teleprogram
+                                Title="{Binding program_title}"
+                                AgeRating="{Binding program_age_rating}"
+                                Category="{Binding program_category}"
+                                Description="{Binding program_description}"
+                                TimeEnd="{Binding end_time}"
+                                TimeStart="{Binding start_time}" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.Footer>
+                        <VerticalStackLayout Margin="12" Spacing="12">
+                            <ActivityIndicator
+                                HeightRequest="50"
+                                IsRunning="{Binding IsFutureBusy}"
+                                IsVisible="{Binding IsFutureBusy}"
+                                WidthRequest="50" />
+                            <Button
+                                BackgroundColor="{StaticResource Primary}"
+                                Command="{Binding FutureButtonClickCommand}"
+                                HeightRequest="40"
+                                IsVisible="{Binding IsFutureVisiable}"
+                                Text="{Binding FutureButtonText}"
+                                WidthRequest="250" />
+                        </VerticalStackLayout>
+                    </CollectionView.Footer>
+                </CollectionView>
+                <ActivityIndicator
+                    HeightRequest="50"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    WidthRequest="50" />
+            </Grid>
             <controls:Problem IsVisible="{Binding IsLoadSucces, Converter={StaticResource BooleanInverse}}" />
         </Grid>
 

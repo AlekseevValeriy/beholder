@@ -5,10 +5,36 @@ public partial class AuthorizationPageViewModel : INotifyPropertyChanged
     readonly INavigationService _navigation;
     readonly IDataLoaderService _dataLoader;
 
+    Boolean _loginIsValid = false;
+    Boolean _passwordIsValid = false;
     ContentPage? _page;
     String _login = "";
     String _password = "";
 
+    public Boolean LoginIsValid
+    {
+        get => _loginIsValid;
+        set
+        {
+            if (value != _loginIsValid)
+            {
+                _loginIsValid = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    public Boolean PasswordIsValid
+    {
+        get => _passwordIsValid;
+        set
+        {
+            if (value != _passwordIsValid)
+            {
+                _passwordIsValid = value;
+                OnPropertyChanged();
+            }
+        }
+    }
     public String Login
     {
         get => _login;
@@ -19,7 +45,7 @@ public partial class AuthorizationPageViewModel : INotifyPropertyChanged
                 _login = value;
                 OnPropertyChanged();
 
-                LoginValidate();
+                LoginIsValid = LoginFormatValidate(Login);
             }
         }
     }
@@ -33,7 +59,7 @@ public partial class AuthorizationPageViewModel : INotifyPropertyChanged
                 _password = value;
                 OnPropertyChanged();
 
-                PasswordValidate();
+                PasswordIsValid = PasswordFormatValidate(Password);
             }
         }
     }
@@ -64,18 +90,58 @@ public partial class AuthorizationPageViewModel : INotifyPropertyChanged
         await Shell.Current.GoToAsync("//favorite");
     }
 
+    async Task<Boolean> UserDataValidate()
+    {
+        if (PasswordIsValid && LoginIsValid) return true;
+
+        if (_page is not null) await _page.DisplayAlert("Ошибка формата", "Был введён неверный формат данных. Пожалуйста, введите данные соответствующие формату.", "Ок");
+
+        return false;
+    }
+
     async void Authorization()
     {
+        if (!await UserDataValidate()) return;
+
         await _appState.GetUserAsync(Login, Password);
 
-        AccountEnter();
+        if (_appState.User is not null)
+        {
+            if (_appState.User.HasProblem)
+            {
+                if (_appState.User.HttpError is not null && _appState.User.HttpError is System.Net.HttpStatusCode.NotFound && _page is not null)
+                {
+                    await _page.DisplayAlert("Не найден", "Не удалось найти пользователя с таким логином. Пожалуйста, зарегистрируетесь.", "Ок");
+                }
+            }
+            else if (_appState.User.IsSuccess)
+            {
+                AccountEnter();
+            }
+        }
     }
 
     async void Registration()
     {
+        if (!await UserDataValidate()) return;
+
         await _appState.AddUserAsync(Login, Password);
 
-        AccountEnter();
+        if (_appState.User is not null)
+        {
+            if (_appState.User.HasProblem)
+            {
+                if (_appState.User.HttpError is not null && _appState.User.HttpError is System.Net.HttpStatusCode.Conflict && _page is not null)
+                {
+                    await _page.DisplayAlert("Конфликт", "Такой пользователь уже существует. Пожалуйста, введите другой логин.", "Ок");
+                }
+            }
+            else if (_appState.User.IsSuccess)
+            {
+                AccountEnter();
+            }
+        }
+
     }
 
     async void AccountEnter()
@@ -84,17 +150,19 @@ public partial class AuthorizationPageViewModel : INotifyPropertyChanged
 
         _dataLoader.Upload(_appState.User.Content.login, _appState.User.Content.password);
 
+        await _appState.LoadFavoritesAsync(_appState.User.Content.id);
+
         await _navigation.NavigateToAccountPageAsync(_page);
     }
 
-    void LoginValidate()
+    Boolean LoginFormatValidate(String login)
     {
-
+        return login.Length >= 3 && login.Length <= 16;
     }
 
-    void PasswordValidate()
+    Boolean PasswordFormatValidate(String password)
     {
-
+        return password.Length >= 8 && password.Length <= 20;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

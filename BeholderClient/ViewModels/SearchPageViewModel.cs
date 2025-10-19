@@ -87,7 +87,7 @@ public partial class SearchPageViewModel : INotifyPropertyChanged
 
     }
 
-    async void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
+    void OnAppStatePropertyChanged(Object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(AppState.ChannelsQueryResult))
         {
@@ -95,7 +95,7 @@ public partial class SearchPageViewModel : INotifyPropertyChanged
 
             if (ChannelsQueryResult is null)
             {
-                ProblemContent = await ProblemHandleHelper.ProblemHandle<List<ChannelResponse>>(_appState.ChannelsQueryResult, _page);
+                ProblemContent = ProblemHandleHelper.ProblemHandle<List<ChannelResponse>>(_appState.ChannelsQueryResult);
                 IsLoadSucces = false;
                 return;
             }

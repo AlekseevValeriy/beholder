@@ -8,8 +8,8 @@
     x:DataType="controls:Teleprogram">
     <Border
         Margin="12,8"
-            BackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark=#2A2A2A}"
-        HeightRequest="40"
+        BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryLight},
+                                          Dark={StaticResource SecondaryDark}}"
         StrokeShape="RoundRectangle 6"
         StrokeThickness="0">
         <Border.Shadow>
@@ -17,7 +17,7 @@
                 <On Platform="Android">
                     <On.Value>
                         <Shadow
-                            Brush="#10000000"
+                            Brush="{StaticResource PrimaryShadowAndroid}"
                             Opacity="0.8"
                             Radius="3" />
                     </On.Value>
@@ -25,37 +25,117 @@
                 <On Platform="WinUI">
                     <On.Value>
                         <Shadow
-                            Brush="#22000000"
+                            Brush="{StaticResource PrimaryShadowWinUI}"
                             Opacity="1.2"
                             Radius="3" />
                     </On.Value>
                 </On>
             </OnPlatform>
         </Border.Shadow>
-        <ScrollView Orientation="Horizontal">
-            <Grid
-                Margin="12,6"
-                ColumnDefinitions="auto,auto,*"
-                ColumnSpacing="12"
-                VerticalOptions="Center">
-                <Label
+        <Grid
+            Margin="12,6"
+            ColumnDefinitions="auto,*,auto"
+            ColumnSpacing="18"
+            RowDefinitions="auto,auto,auto"
+            RowSpacing="8"
+            VerticalOptions="Center">
+            <!--<Label
+                    Grid.Row="0"
+                    Grid.RowSpan="4"
                     Grid.Column="0"
                     x:DataType="controls:Teleprogram"
                     BindingContext="{x:Reference This}"
                     FontAttributes="Bold"
                     FontSize="16"
-                    Text="{Binding Time}"
-                       TextColor="{AppThemeBinding Light=#111, Dark=#B0C4FF}" />
+                    TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                                Dark={StaticResource TertiaryTextDark}}">
+                    <Label.Text>
+                        <MultiBinding StringFormat="{}{0:HH:mm} - {1:HH:mm}">
+                            <Binding Path="TimeStart" />
+                            <Binding Path="TimeEnd" />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>-->
+            <VerticalStackLayout
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                HorizontalOptions="Center"
+                Spacing="18"
+                VerticalOptions="Center">
                 <Label
-                    Grid.Column="1"
                     x:DataType="controls:Teleprogram"
                     BindingContext="{x:Reference This}"
+                    FontAttributes="Bold"
                     FontSize="16"
+                    Text="{Binding TimeStart, StringFormat='{0:HH:mm}'}"
+                    TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                                Dark={StaticResource TertiaryTextDark}}" />
+                <Label
+                    x:DataType="controls:Teleprogram"
+                    BindingContext="{x:Reference This}"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    Text="{Binding TimeEnd, StringFormat='{0:HH:mm}'}"
+                    TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                                Dark={StaticResource TertiaryTextDark}}" />
+            </VerticalStackLayout>
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                x:DataType="controls:Teleprogram"
+                BindingContext="{x:Reference This}"
+                FontSize="18"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding Category}"
+                TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                            Dark=#777}" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                x:DataType="controls:Teleprogram"
+                BindingContext="{x:Reference This}"
+                FontAttributes="Bold"
+                FontSize="20"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding Title}"
+                TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                            Dark={StaticResource TertiaryTextDark}}" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="1"
+                x:DataType="controls:Teleprogram"
+                BindingContext="{x:Reference This}"
+                FontSize="16"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding Description}"
+                TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                            Dark=#828282}" />
+            <Border
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="2"
+                BackgroundColor="#929292"
+                HeightRequest="30"
+                HorizontalOptions="End"
+                StrokeShape="RoundRectangle 10"
+                WidthRequest="30">
+                <Label
+                    x:DataType="controls:Teleprogram"
+                    BindingContext="{x:Reference This}"
+                    FontSize="14"
+                    HorizontalOptions="Center"
                     LineBreakMode="TailTruncation"
                     MaxLines="1"
-                    Text="{Binding Title}"
-                       TextColor="{AppThemeBinding Light=#333, Dark=#B0C4FF}" />
-            </Grid>
-        </ScrollView>
+                    Text="{Binding AgeRating}"
+                    TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                                Dark={StaticResource White}}"
+                    VerticalOptions="Center" />
+            </Border>
+
+        </Grid>
     </Border>
 </ContentView>

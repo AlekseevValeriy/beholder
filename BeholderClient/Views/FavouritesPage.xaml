@@ -17,15 +17,15 @@
     <Grid RowDefinitions="auto,*">
         <Border
             Grid.Row="0"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
-                                             Dark={StaticResource PrimaryDark}}"
-                HeightRequest="50"
+            BackgroundColor="{StaticResource Primary}"
+            HeightRequest="50"
             Stroke="{StaticResource Primary}">
             <Grid Margin="12,0,6,0" ColumnDefinitions="auto,*,auto">
                 <HorizontalStackLayout Grid.Column="0">
                     <Image
                         HeightRequest="20"
-                        Source="user4.png"
+                        Source="{AppThemeBinding Light=user_light.png,
+                                                 Dark=user_dark.png}"
                         WidthRequest="20" />
                     <Button
                         BackgroundColor="Transparent"
@@ -33,32 +33,38 @@
                         ContentLayout="Left,5"
                         HeightRequest="30"
                         Text="{Binding UserName}"
-                        TextColor="White" />
+                        TextColor="{AppThemeBinding Light={StaticResource BarTextLight},
+                                                    Dark={StaticResource BarTextDark}}" />
                 </HorizontalStackLayout>
+                <controls:Update
+                    Grid.Column="2"
+                    Command="{Binding LoadDataCommand}"
+                    HeightRequest="30"
+                    WidthRequest="30" />
             </Grid>
         </Border>
         <Grid Grid.Row="1">
             <Grid IsVisible="{Binding IsLoadSucces}">
-                <ScrollView IsVisible="{Binding IsBusy, Converter={StaticResource BooleanInverse}}" Orientation="Vertical">
-                    <VerticalStackLayout Margin="12">
-                        <CollectionView ItemsSource="{Binding Favorites}">
-                            <CollectionView.ItemsLayout>
-                                <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:FavoriteResponse">
+                <CollectionView
+                    Margin="12"
+                    IsVisible="{Binding IsBusy, Converter={StaticResource BooleanInverse}}"
+                    ItemsSource="{Binding Favorites}"
+                    VerticalScrollBarVisibility="Never">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:FavoriteResponse">
 
-                                    <controls:ShortChannel
-                                        Title="{Binding name}"
-                                        ChannelId="{Binding id}"
-                                        Image="{Binding icon_path}"
-                                        TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
+                            <controls:ShortChannel
+                                Title="{Binding name}"
+                                ChannelId="{Binding id}"
+                                Image="{Binding icon_path}"
+                                TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
 
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </VerticalStackLayout>
-                </ScrollView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
                 <ActivityIndicator
                     IsRunning="{Binding IsBusy}"
                     IsVisible="{Binding IsBusy}"

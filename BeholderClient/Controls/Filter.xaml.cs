@@ -1,20 +1,38 @@
+using Beholder.Extensions;
+
 namespace Beholder.Controls;
 
 public partial class Filter : ContentView
 {
-    static Color BackroundColorIdle = Application.Current?.RequestedTheme switch
-    { 
-        AppTheme.Dark => Color.FromArgb("#0358e6"),
-        AppTheme.Light or _ => Color.FromArgb("#E3F2FD")
+    static readonly Color _defaultColor = Color.FromArgb("#cd0aa5");
+
+    static readonly Color BackroundColorIdle = Application.Current?.RequestedTheme switch
+    {
+        AppTheme.Light => App.Current.Resources.GetColorOrDefault("SecondaryLight", _defaultColor),
+        AppTheme.Dark => App.Current.Resources.GetColorOrDefault("SecondaryDark", _defaultColor),
+        _ => Colors.Transparent
     };
-    static Color TextColorIdle = Application.Current?.RequestedTheme switch
+    static readonly Color BackgroundColorSort = Application.Current?.RequestedTheme switch
     { 
-        AppTheme.Dark => Color.FromArgb("#FFFFFF"),
-        AppTheme.Light or _ => Color.FromArgb("#0D47A1")
+        AppTheme.Light => App.Current.Resources.GetColorOrDefault("FilterBackgroundSortLight", _defaultColor),
+        AppTheme.Dark => App.Current.Resources.GetColorOrDefault("FilterBackgroundSortDark", _defaultColor),
+        _ => Colors.Transparent
+    };
+    static readonly Color TextColorIdle = Application.Current?.RequestedTheme switch
+    { 
+        AppTheme.Light => App.Current.Resources.GetColorOrDefault("FilterTextIdleLight", _defaultColor),
+        AppTheme.Dark => App.Current.Resources.GetColorOrDefault("FilterTextIdleDark", _defaultColor),
+        _ => Colors.Transparent
+    };
+    static readonly Color TextColorSort = Application.Current?.RequestedTheme switch
+    { 
+        AppTheme.Light => App.Current.Resources.GetColorOrDefault("FilterTextSortLight", _defaultColor),
+        AppTheme.Dark => App.Current.Resources.GetColorOrDefault("FilterTextSortDark", _defaultColor),
+        _ => Colors.Transparent
     };
 
-    public FilterMS StateMachine { get; private set; } = new();
-    public Double ImageSize { get; } = 15;
+    public FilterControlStateMachine StateMachine { get; private set; } = new();
+    public Double ImageSize { get; } = 16;
 
     public delegate void EventHandler(Object sender);
     public event EventHandler? BecameFocused;
@@ -46,12 +64,21 @@ public partial class Filter : ContentView
         {
             case FilterState.Idle:
                 {
-                    Background.BackgroundColor = BackroundColorIdle;
+                    if (Application.Current?.RequestedTheme is AppTheme.Dark)
+                    {
+                        Background.Stroke = BackroundColorIdle;
+                        Background.HeightRequest = 30;
+                    }
+                    else
+                    {
+                        Background.BackgroundColor = BackroundColorIdle;
+                        TextLabel.TextColor = TextColorIdle;
+                    }
 
-                    TextLabel.TextColor = TextColorIdle;
 
                     ArrowImage.IsVisible = false;
                     ArrowImage.WidthRequest = 0;
+
                     await Task.WhenAll(
                         ArrowImage.LayoutTo(new Rect(0.0, 0.0, 0.0, ImageSize)),
                         ArrowImage.RotateTo(0));
@@ -61,18 +88,26 @@ public partial class Filter : ContentView
                 {
                     BecameFocused?.Invoke(this);
 
-                    Background.BackgroundColor = Color.FromArgb("#FFFFFF");
-
-                    TextLabel.TextColor = Color.FromArgb("#424242");
+                    if (Application.Current?.RequestedTheme is AppTheme.Dark)
+                    {
+                        Background.Stroke = BackgroundColorSort;
+                        Background.HeightRequest = 34;
+                    }
+                    else
+                    {
+                        Background.BackgroundColor = BackgroundColorSort;
+                        TextLabel.TextColor = TextColorSort;
+                    }
 
                     ArrowImage.IsVisible = true;
                     ArrowImage.WidthRequest = ImageSize;
-                    await Task.Run(() => ArrowImage.LayoutTo(new Rect(0.0, 0.0, ImageSize, ImageSize)));
+
+                    await ArrowImage.LayoutTo(new Rect(0.0, 0.0, ImageSize, ImageSize));
                     break;
                 }
             case FilterState.AscendingSort:
                 {
-                    await Task.Run(() => ArrowImage.RotateTo(-180, 400, Easing.CubicInOut));
+                    await ArrowImage.RotateTo(-180, 400, Easing.CubicInOut);
                     break;
                 }
             default:
@@ -95,7 +130,7 @@ public partial class Filter : ContentView
     }
 }
 
-public class FilterMS
+public class FilterControlStateMachine
 {
     FilterState _state = FilterState.Idle;
 

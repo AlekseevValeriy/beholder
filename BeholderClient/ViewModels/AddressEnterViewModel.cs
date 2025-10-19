@@ -2,7 +2,7 @@
 
 internal class AddressEnterViewModel : INotifyPropertyChanged
 {
-    String _address = "";
+    String _address = "https://certainly-peaceful-rabbit.cloudpub.ru:443";
 
     public String Address
     {

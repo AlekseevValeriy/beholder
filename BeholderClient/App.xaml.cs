@@ -10,7 +10,8 @@
         protected override Window CreateWindow(IActivationState? activationState)
         {
 #if DEBUG
-            return new Window(new AppShell());
+            return new Window(new AddressEnter());
+            //return new Window(new AppShell());
 #else
             return new Window(new AddressEnter());
 #endif

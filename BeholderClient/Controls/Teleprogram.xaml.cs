@@ -9,6 +9,27 @@ public partial class Teleprogram : ContentView
         set => SetValue(TitleProperty, value);
     }
 
+    public static readonly BindableProperty DescriptionProperty = BindableProperty.Create(nameof(Description), typeof(String), typeof(Teleprogram), default(String));
+    public String Description
+    {
+        get => (String)GetValue(DescriptionProperty);
+        set => SetValue(DescriptionProperty, value);
+    }
+
+    public static readonly BindableProperty CategoryProperty = BindableProperty.Create(nameof(Category), typeof(String), typeof(Teleprogram), default(String));
+    public String Category
+    {
+        get => (String)GetValue(CategoryProperty);
+        set => SetValue(CategoryProperty, value);
+    }
+
+    public static readonly BindableProperty AgeRatingProperty = BindableProperty.Create(nameof(AgeRating), typeof(String), typeof(Teleprogram), default(String));
+    public String AgeRating
+    {
+        get => (String)GetValue(AgeRatingProperty);
+        set => SetValue(AgeRatingProperty, value);
+    }
+
     public static readonly BindableProperty TimeStartProperty = BindableProperty.Create(nameof(TimeStart), typeof(DateTime), typeof(Teleprogram), default(DateTime));
     public DateTime TimeStart
     {

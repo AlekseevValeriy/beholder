@@ -28,15 +28,19 @@ public class ChannelResponse
 public class ScheduleResponse
 {
     public String program_title { get; set; }
-    public String channel_name { get; set; }
+    public String program_description { get; set; }
+    public String program_category { get; set; }
+    public String program_age_rating { get; set; }
     public DateTime start_time { get; set; }
     public DateTime end_time { get; set; }
 
     [JsonConstructor]
-    public ScheduleResponse(String program_title, String channel_name, DateTime start_time, DateTime end_time)
+    public ScheduleResponse(String program_title, String program_description, String program_category, String program_age_rating, DateTime start_time, DateTime end_time)
     {
         this.program_title = program_title;
-        this.channel_name = channel_name;
+        this.program_description = program_description;
+        this.program_category = program_category;
+        this.program_age_rating = program_age_rating;
         this.start_time = start_time;
         this.end_time = end_time;
     }
@@ -59,7 +63,7 @@ public class FavoriteResponse
     public String icon_path { get; set; }
 
     [JsonConstructor]
-    public FavoriteResponse(Int32 id, String name, Int32 number, String description, String icon_path)
+    public FavoriteResponse(Int32 id, String name, String icon_path)
     {
         this.id = id;
         this.name = name;

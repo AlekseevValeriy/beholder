@@ -18,8 +18,18 @@ public class TeleprogramDB : DbContext
     public DbSet<Favorite> Favorites => Set<Favorite>();
     public DbSet<User> Users => Set<User>();
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ScheduleItemDto>().HasNoKey();
+
+        modelBuilder.Entity<ScheduleItemDto>().ToView(null);
+
+        base.OnModelCreating(modelBuilder);
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@$"Server={SERVER}; Database={DATABASE}; TrustServerCertificate=True; Trusted_Connection=True;");
+        optionsBuilder.UseSqlServer(@$"Server={SERVER}; Database={DATABASE}; TrustServerCertificate=True; Trusted_Connection=True; ",
+            sqlServerOptions => sqlServerOptions.CommandTimeout(60));
     }
 }

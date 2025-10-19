@@ -1,3 +1,5 @@
+using Azure.Core;
+
 using BeholderServer.Models;
 
 using Microsoft.AspNetCore.Diagnostics;
@@ -5,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using static Microsoft.AspNetCore.Http.Results;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BeholderServer
 {
@@ -42,7 +45,7 @@ namespace BeholderServer
 
             app.MapGet("/channels", async (TeleprogramDB db) =>
             {
-                var result = from channel in db.Channels
+                var query = from channel in db.Channels
                              select new
                              {
                                  channel.id,
@@ -52,17 +55,18 @@ namespace BeholderServer
                                  channel.icon_path,
                                  channel.tags
                              };
-                if (!await result.AnyAsync())
+                var result = await query.AsNoTracking().ToListAsync();
+
+                if (result is null || result.Count == 0)
                 {
                     return NotFound();
                 }
                 return Ok(result);
             });
 
-            //app.MapGet("/channels/channelId={id:int}", (Int32 id, TeleprogramDB db) =>
             app.MapGet("/channels/{id:int}", async (Int32 id, TeleprogramDB db) =>
             {
-                var result = from channel in db.Channels
+                var query = from channel in db.Channels
                              where channel.id == id
                              select new
                              {
@@ -73,18 +77,18 @@ namespace BeholderServer
                                  channel.icon_path,
                                  channel.tags
                              };
+                var result = await query.AsNoTracking().ToListAsync();
 
-                if (!await result.AnyAsync())
+                if (result is null || result.Count == 0)
                 {
                     return NotFound();
                 }
                 return Ok(result);
             });
 
-            //app.MapGet("/channels/searchQuery={searchQuery}", (String searchQuery, TeleprogramDB db) =>
             app.MapGet("/channels/search", async (String searchQuery, TeleprogramDB db) =>
             {
-                var result = from channel in db.Channels
+                var query = from channel in db.Channels
                              where channel.name.Contains(searchQuery)
                              || channel.number.ToString().Contains(searchQuery)
                              || (channel.description != null && channel.description.Contains(searchQuery))
@@ -98,30 +102,88 @@ namespace BeholderServer
                                  channel.icon_path,
                                  channel.tags
                              };
+                var result = await query.AsNoTracking().ToListAsync();
 
-                if (!await result.AnyAsync())
+                if (result is null || result.Count == 0)
                 {
                     return NotFound();
                 }
                 return Ok(result);
             });
 
+            app.MapGet("/schedule/{channelId:int}/{requestDate}", async (Int32 channelId, String requestDate, TeleprogramDB db) =>
+            {
+                if (!DateTime.TryParse(requestDate, out DateTime date))
+                {
+                    return Conflict();
+                }
+
+                DateTime startDate = date.Date;
+                DateTime endDate = startDate.AddDays(1);
+
+                var query = from schedule in db.Schedule
+                            join channel in db.Channels on schedule.channel_id equals channel.id
+                            join program in db.Programs on schedule.program_id equals program.id
+                            where schedule.channel_id == channelId
+                            && schedule.start_time >= startDate
+                            && schedule.end_time <= endDate
+                            select schedule;
+
+                var result = await query.TagWith("OPTION (RECOMPILE)").AsNoTracking().ToListAsync();
+
+                if (result is null || result.Count == 0)
+                {
+                    return NotFound();
+                }
+                return Ok();
+            });
+
             app.MapPost("/schedule", async ([FromBody] ScheduleRequest request, TeleprogramDB db) =>
             {
-                var result = from schedule in db.Schedule
-                             join channel in db.Channels on schedule.channel_id equals channel.id
-                             join program in db.Programs on schedule.program_id equals program.id
-                             where schedule.program_id == request.program_id
-                             && EF.Functions.DateDiffDay(schedule.start_time, request.date) == 0
-                             select new
-                             {
-                                 program_title = program.title,
-                                 channel_name = channel.name,
-                                 schedule.start_time,
-                                 schedule.end_time
-                             };
+                DateTime startDate = request.date.Date;
+                DateTime endDate = startDate.AddDays(1);
 
-                if (!await result.AnyAsync())
+                //String sqlQuery = @"
+                //    SELECT 
+                //        T3.title AS program_title, 
+                //        T2.name AS channel_name, 
+                //        T1.start_time, 
+                //        T1.end_time
+                //    FROM 
+                //        Schedule T1 WITH (NOLOCK)
+                //        JOIN Channels T2 WITH (NOLOCK) ON T1.channel_id = T2.id
+                //        JOIN Programs T3 WITH (NOLOCK) ON T1.program_id = T3.id
+                //    WHERE 
+                //        T1.channel_id = {0}
+                //        AND T1.start_time >= {1}
+                //        AND T1.start_time < {2}";
+
+                //var result = await db.Set<ScheduleItemDto>()
+                //    //.FromSqlRaw(sqlQuery)
+                //    .FromSqlRaw(sqlQuery, request.channel_id, startDate, endDate)
+                //    .TagWith("OPTION (RECOMPILE)")
+                //    .AsNoTracking()
+                //    .ToListAsync();
+
+                var query = from schedule in db.Schedule
+                            join channel in db.Channels on schedule.channel_id equals channel.id
+                            join program in db.Programs on schedule.program_id equals program.id
+                            where schedule.channel_id == request.channel_id
+                            && schedule.start_time >= startDate
+                            && schedule.end_time <= endDate
+                            select new
+                            {
+                                program_title = program.title,
+                                program_description = program.description,
+                                program_category = program.category,
+                                program_age_rating = program.age_rating,
+                                schedule.start_time,
+                                schedule.end_time
+                            };
+
+                var result = await query.TagWith("OPTION (RECOMPILE)").AsNoTracking().ToListAsync();
+
+                if (result is null || result.Count == 0)
                 {
                     return NotFound();
                 }
@@ -130,7 +192,7 @@ namespace BeholderServer
 
             app.MapGet("/favorites/{userId:int}", async (Int32 userId, TeleprogramDB db) =>
             {
-                var result = from favorite in db.Favorites
+                var query = from favorite in db.Favorites
                              where favorite.user_id == userId
                              join channel in db.Channels on favorite.channel_id equals channel.id
                              select new
@@ -139,8 +201,9 @@ namespace BeholderServer
                                  channel.name,
                                  channel.icon_path
                              };
+                var result = await query.AsNoTracking().ToListAsync();
 
-                if (!await result.AnyAsync())
+                if (result is null || result.Count == 0)
                 {
                     return NotFound();
                 }
@@ -150,11 +213,12 @@ namespace BeholderServer
             //app.MapGet("/favorites/channelId={id:int}", async (Int32 id, TeleprogramDB db) =>
             app.MapGet("/favorites/{userId:int}/{channelId:int}", async (Int32 userId, Int32 channelId, TeleprogramDB db) =>
             {
-                var result = from favorite in db.Favorites
+                var query = from favorite in db.Favorites
                              where channelId == favorite.channel_id && userId == favorite.user_id
                              select favorite;
+                var result = await query.AsNoTracking().ToListAsync();
 
-                if (!await result.AnyAsync())
+                if (result is null || result.Count == 0)
                 {
                     return NotFound();
                 }
@@ -189,16 +253,17 @@ namespace BeholderServer
 
             app.MapDelete("/favorites", async ([AsParameters] FavoriteRequest request, TeleprogramDB db) =>
             {
-                var result = from favorite in db.Favorites
+                var query = from favorite in db.Favorites
                              where favorite.user_id == request.user_id && favorite.channel_id == request.channel_id
                              select favorite;
+                var result = await query.ToListAsync();
 
-                if (!await result.AnyAsync())
+                if (result is null || result.Count == 0)
                 {
                     return NotFound();
                 }
 
-                db.Favorites.Remove(await result.FirstAsync());
+                db.Favorites.Remove(result.First());
 
                 await db.SaveChangesAsync();
 
@@ -207,10 +272,12 @@ namespace BeholderServer
 
             app.MapGet("/users", async ([AsParameters] UserRequest request, TeleprogramDB db) =>
             {
-                var result = from user in db.Users
+                var query = from user in db.Users
                              where user.login == request.login && user.password_hash == request.password_hash
                              select user.id;
-                if (!await result.AnyAsync())
+                var result = await query.ToListAsync();
+
+                if (result is null || result.Count == 0)
                 {
                     return NotFound();
                 }
@@ -240,24 +307,26 @@ namespace BeholderServer
 
             app.MapDelete("/users", async ([AsParameters] UserDeleteRequest request, TeleprogramDB db) =>
             {
-                var userResult = from usr in db.Users
+                var userQuery = from usr in db.Users
                                  where usr.id == request.id && usr.login == request.login && usr.password_hash == request.password_hash
                                  select usr;
+                var userResult = await userQuery.ToListAsync();
 
-                if (!await userResult.AnyAsync())
+                if (userResult is null || userResult.Count == 0)
                 {
                     return NotFound();
                 }
 
-                User user = await userResult.FirstAsync();
+                User user = userResult.First();
 
                 db.Users.Remove(user);
 
-                var favoriteResult = from favorite in db.Favorites
+                var favoriteQuery= from favorite in db.Favorites
                                      where favorite.user_id == user.id
                                      select favorite;
+                var favoriteResult = await favoriteQuery.ToListAsync();
 
-                if (await favoriteResult.AnyAsync())
+                if (favoriteResult is not null && favoriteResult.Count != 0)
                 {
                     db.Favorites.RemoveRange(favoriteResult);
                 }

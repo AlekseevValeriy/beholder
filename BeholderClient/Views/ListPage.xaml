@@ -20,48 +20,62 @@
         RowDefinitions="auto,*">
         <Border
             Grid.Row="0"
-            BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
-                                              Dark={StaticResource PrimaryDark}}"
+            BackgroundColor="{StaticResource Primary}"
             HeightRequest="50">
-            <FlexLayout
-                x:Name="FiltersLayout"
-                Margin="12,0,12,0"
-                JustifyContent="SpaceBetween"
-                VerticalOptions="Center">
-                <controls:Filter Command="{Binding ChannelSortCommand}" Text="Номер" />
-                <controls:Filter Command="{Binding ChannelSortCommand}" Text="Название" />
-                <controls:Filter Command="{Binding ChannelSortCommand}" Text="Описание" />
-            </FlexLayout>
+            <Grid Margin="12,0,12,0" ColumnDefinitions="auto,*,auto">
+                <Grid
+                    x:Name="FiltersLayout"
+                    Grid.Column="0"
+                    ColumnDefinitions="auto,auto,auto"
+                    ColumnSpacing="24"
+                    VerticalOptions="Center">
+                    <controls:Filter
+                        Grid.Column="0"
+                        Command="{Binding ChannelSortCommand}"
+                        Text="Номер" />
+                    <controls:Filter
+                        Grid.Column="1"
+                        Command="{Binding ChannelSortCommand}"
+                        Text="Название" />
+                    <controls:Filter
+                        Grid.Column="2"
+                        Command="{Binding ChannelSortCommand}"
+                        Text="Описание" />
+                </Grid>
+                <controls:Update
+                    Grid.Column="2"
+                    Command="{Binding LoadDataCommand}"
+                    HeightRequest="30"
+                    WidthRequest="30" />
+            </Grid>
+
         </Border>
 
         <Grid Grid.Row="1">
             <Grid IsVisible="{Binding IsLoadSucces}">
-                <ScrollView
-                    x:Name="Body"
+                <CollectionView
+                    Margin="12"
                     IsVisible="{Binding IsBusy, Converter={StaticResource BooleanInverse}}"
-                    Orientation="Vertical">
-                    <VerticalStackLayout Margin="12">
-                        <CollectionView ItemsSource="{Binding Channels}">
-                            <CollectionView.ItemsLayout>
-                                <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:ChannelResponse">
+                    ItemsSource="{Binding Channels}"
+                    VerticalScrollBarVisibility="Never">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ChannelResponse">
 
-                                    <controls:Channel
-                                        Title="{Binding name}"
-                                        ChannelId="{Binding id}"
-                                        Description="{Binding description}"
-                                        Image="{Binding icon_path}"
-                                        Number="{Binding number}"
-                                        Tags="{Binding tags}"
-                                        TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
+                            <controls:Channel
+                                Title="{Binding name}"
+                                ChannelId="{Binding id}"
+                                Description="{Binding description}"
+                                Image="{Binding icon_path}"
+                                Number="{Binding number}"
+                                Tags="{Binding tags}"
+                                TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
 
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </VerticalStackLayout>
-                </ScrollView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
                 <ActivityIndicator
                     HeightRequest="50"
                     IsRunning="{Binding IsBusy}"

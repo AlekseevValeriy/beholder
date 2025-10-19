@@ -8,9 +8,8 @@
     x:DataType="controls:Tag">
     <Border
         Margin="0,0,6,6"
-            BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark=#2A2A2A}"
+        BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryLight}, Dark={StaticResource SecondaryDark}}"
         HeightRequest="30"
-        Stroke="Transparent"
         StrokeShape="RoundRectangle 4"
         StrokeThickness="0">
         <ScrollView HorizontalOptions="Center" Orientation="Horizontal">
@@ -22,8 +21,8 @@
                 HorizontalOptions="Center"
                 MaxLines="1"
                 Text="{Binding Text}"
-                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark=#B0C4FF}"
-                   VerticalOptions="Center" />
+                TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight}, Dark={StaticResource TertiaryTextDark}}"
+                VerticalOptions="Center" />
         </ScrollView>
     </Border>
 </ContentView>

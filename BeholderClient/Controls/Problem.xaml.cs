@@ -25,5 +25,6 @@ public partial class Problem : ContentView
     public static Problem InternalError => new() { Text= "На сервере произошла непредвиденная ошибка", ImageSource= "db_internal_error.png" };
     public static Problem NoConnect => new() { Text= "Осутствует подключение к серверу", ImageSource= "db_no_connect.png" };
     public static Problem NotFound => new() { Text= "Не удалось найти информацию", ImageSource= "not_found.png" };
+    public static Problem NoAuth => new() { Text= "Вы не авторизованы", ImageSource= "no_auth.png" };
     public static Problem None => new() { Text= "", ImageSource= "" };
 }

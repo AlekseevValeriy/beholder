@@ -1,4 +1,6 @@
-﻿namespace Beholder.ViewModels;
+﻿using System.Threading.Tasks;
+
+namespace Beholder.ViewModels;
 
 public partial class TeleprogramPageViewModel : INotifyPropertyChanged
 {
@@ -17,8 +19,10 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
     Boolean _isAuthorized = false;
     Boolean _isLoadSucces = false;
     Boolean _isBusy = false;
-    Boolean _isFutureVisiable = true;
-    Boolean _isPastVisiable = true;
+    Boolean _isFutureBusy = false;
+    Boolean _isPastBusy = false;
+    Boolean _isFutureVisiable = false;
+    Boolean _isPastVisiable = false;
     Problem _problemContent = Problem.None;
     ChannelResponse? _channel;
     ObservableCollection<ScheduleResponse>? _schedule;
@@ -55,6 +59,30 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
             if (value != _isBusy)
             {
                 _isBusy = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    public Boolean IsPastBusy
+    {
+        get => _isPastBusy;
+        set
+        {
+            if (value != _isPastBusy)
+            {
+                _isPastBusy = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+    public Boolean IsFutureBusy
+    {
+        get => _isFutureBusy;
+        set
+        {
+            if (value != _isFutureBusy)
+            {
+                _isFutureBusy = value;
                 OnPropertyChanged();
             }
         }
@@ -222,7 +250,7 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
             {
                 if (response.HasProblem)
                 {
-                    ProblemContent = await ProblemHandleHelper.ProblemHandle<ChannelResponse>(response, _page);
+                    ProblemContent = ProblemHandleHelper.ProblemHandle<ChannelResponse>(response);
                     IsLoadSucces = false;
                 }
                 else if (response.Content is not null)
@@ -277,25 +305,45 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
         FutureButtonText = $"Программы на {_futureDate:dd.MM.yyyy}";
     }
 
-    void PastButtonClick()
+    async void PastButtonClick()
     {
-        // Проверка на валидность
-
         AddSchudle(_pastDate, ScheduleLoadPosition.Past);
 
         MoveNextPastText();
-    }
-    void FutureButtonClick()
-    {
-        // Проверка на валидность
 
+        if (!await IsDateActual(_pastDate))
+        {
+            IsPastVisiable = false;
+        }
+    }
+    async void FutureButtonClick()
+    {
         AddSchudle(_futureDate, ScheduleLoadPosition.Future);
 
         MoveNextFutureText();
+
+        if (!await IsDateActual(_futureDate))
+        {
+            IsFutureVisiable = false;
+        }
+    }
+
+    async Task<Boolean> IsDateActual(DateTime date)
+    {
+        ApiResponse<Boolean> response = await appState.HasScheduleAsync(_channelId, date);
+
+        if (response.IsSuccess) return response.Content;
+        return false;
     }
 
     async void AddSchudle(DateTime date, ScheduleLoadPosition postion)
     {
+        switch (postion)
+        {
+            case ScheduleLoadPosition.Just | ScheduleLoadPosition.Past: IsPastBusy = true; break;
+            default: IsFutureBusy = true; break;
+        }
+
         var response = await appState.LoadScheduleAsync(_channelId, date);
 
         if (response is not null && response.IsSuccess && response.Content is not null && response.Content.Count > 0)
@@ -303,10 +351,18 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
             if (postion == ScheduleLoadPosition.Just)
             {
                 _futureDate = DateTime.Today;
-                _pastDate = DateTime.Today;
-
                 MoveNextFutureText();
+                if (await IsDateActual(_futureDate))
+                {
+                    IsFutureVisiable = true;
+                }
+
+                _pastDate = DateTime.Today;
                 MoveNextPastText();
+                if (await IsDateActual(_pastDate))
+                {
+                    IsPastVisiable = true;
+                }
 
                 SchudleContains = true;
             }
@@ -315,8 +371,7 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
             {
                 GroupedSchedules = new(response.Content
                     .OrderBy(x => x.start_time)
-                    .GroupBy(s => s.start_time
-                    .ToString("d"))
+                    .GroupBy(s => $"{s.start_time:dd.MM.yyyy}")
                     .Select(g => new ScheduleResponseGroup(g.Key, new(g))));
             }
             else
@@ -326,10 +381,12 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
                     .ToList()
                     .Concat(response.Content)
                     .OrderBy(x => x.start_time)
-                    .GroupBy(s => s.start_time
-                    .ToString("d"))
+                    .GroupBy(s => $"{s.start_time:dd.MM.yyyy}")
                     .Select(g => new ScheduleResponseGroup(g.Key, new(g))));
             }
+
+            IsPastBusy = false;
+            IsFutureBusy = false;
         }
     }
 

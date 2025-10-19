@@ -456,7 +456,7 @@ target triple = "aarch64-unknown-linux-android21"
 		ptr @__compressedAssemblyData_86; uint8_t* data
 	}, ; 86: Xamarin.KotlinX.Serialization.Core.Jvm
 	%struct.CompressedAssemblyDescriptor {
-		i32 306688, ; uint32_t uncompressed_file_size
+		i32 329728, ; uint32_t uncompressed_file_size
 		i1 false, ; bool loaded
 		ptr @__compressedAssemblyData_87; uint8_t* data
 	}, ; 87: BeholderClient
@@ -819,7 +819,7 @@ target triple = "aarch64-unknown-linux-android21"
 @__compressedAssemblyData_84 = internal dso_local global [86016 x i8] zeroinitializer, align 1
 @__compressedAssemblyData_85 = internal dso_local global [18432 x i8] zeroinitializer, align 1
 @__compressedAssemblyData_86 = internal dso_local global [89600 x i8] zeroinitializer, align 1
-@__compressedAssemblyData_87 = internal dso_local global [306688 x i8] zeroinitializer, align 1
+@__compressedAssemblyData_87 = internal dso_local global [329728 x i8] zeroinitializer, align 1
 @__compressedAssemblyData_88 = internal dso_local global [33280 x i8] zeroinitializer, align 1
 @__compressedAssemblyData_89 = internal dso_local global [16384 x i8] zeroinitializer, align 1
 @__compressedAssemblyData_90 = internal dso_local global [14336 x i8] zeroinitializer, align 1

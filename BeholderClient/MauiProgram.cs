@@ -19,9 +19,11 @@ public static class MauiProgram
             });
 
 #if DEBUG
-        builder.Services.AddSingleton<IApiClient, MockApiClient>();
+        builder.Services.AddSingleton<IApiClient, ApiClient>();
+        //builder.Services.AddSingleton<IApiClient, MockApiClient>();
 #else
         builder.Services.AddSingleton<IApiClient, ApiClient>();
+        //builder.Services.AddSingleton<IApiClient, MockApiClient>();
 #endif
 
         builder.Services.AddSingleton<INavigationService, NavigationService>();

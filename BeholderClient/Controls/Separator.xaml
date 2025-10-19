@@ -16,7 +16,7 @@
               x:DataType="controls:Separator"
               BindingContext="{Reference This}"
               IsVisible="{Binding IsVisible}"
-              Stroke="{AppThemeBinding Light=#1A000000, Dark=#6b6c75}"
+              Stroke="{AppThemeBinding Light={StaticResource SeparatorLight}, Dark={StaticResource SeparatorDark}}"
               StrokeThickness="2"
               X1="0"
               X2="250"
