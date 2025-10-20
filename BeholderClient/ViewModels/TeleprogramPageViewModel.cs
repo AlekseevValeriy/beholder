@@ -338,11 +338,8 @@ public partial class TeleprogramPageViewModel : INotifyPropertyChanged
 
     async void AddSchudle(DateTime date, ScheduleLoadPosition postion)
     {
-        switch (postion)
-        {
-            case ScheduleLoadPosition.Just | ScheduleLoadPosition.Past: IsPastBusy = true; break;
-            default: IsFutureBusy = true; break;
-        }
+        if (postion == ScheduleLoadPosition.Just || postion == ScheduleLoadPosition.Past) IsPastBusy = true;
+        else if (postion == ScheduleLoadPosition.Future) IsFutureBusy = true;
 
         var response = await appState.LoadScheduleAsync(_channelId, date);
 

@@ -21,10 +21,10 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
 		<!-- Display name -->
-		<ApplicationTitle>Beholder</ApplicationTitle>
+		<ApplicationTitle>Телегид</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.beholder</ApplicationId>
+		<ApplicationId>com.vuarera.beholder</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

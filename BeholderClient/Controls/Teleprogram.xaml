@@ -39,23 +39,6 @@
             RowDefinitions="auto,auto,auto"
             RowSpacing="8"
             VerticalOptions="Center">
-            <!--<Label
-                    Grid.Row="0"
-                    Grid.RowSpan="4"
-                    Grid.Column="0"
-                    x:DataType="controls:Teleprogram"
-                    BindingContext="{x:Reference This}"
-                    FontAttributes="Bold"
-                    FontSize="16"
-                    TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
-                                                Dark={StaticResource TertiaryTextDark}}">
-                    <Label.Text>
-                        <MultiBinding StringFormat="{}{0:HH:mm} - {1:HH:mm}">
-                            <Binding Path="TimeStart" />
-                            <Binding Path="TimeEnd" />
-                        </MultiBinding>
-                    </Label.Text>
-                </Label>-->
             <VerticalStackLayout
                 Grid.Row="0"
                 Grid.RowSpan="3"
@@ -118,20 +101,21 @@
                 Grid.Row="0"
                 Grid.RowSpan="3"
                 Grid.Column="2"
-                BackgroundColor="#929292"
-                HeightRequest="30"
+                BackgroundColor="{AppThemeBinding Dark=Transparent,
+                                                  Light=Transparent}"
+                HeightRequest="40"
                 HorizontalOptions="End"
-                StrokeShape="RoundRectangle 10"
-                WidthRequest="30">
+                StrokeShape="RoundRectangle 15"
+                WidthRequest="40">
                 <Label
                     x:DataType="controls:Teleprogram"
                     BindingContext="{x:Reference This}"
-                    FontSize="14"
+                    FontSize="18"
                     HorizontalOptions="Center"
                     LineBreakMode="TailTruncation"
                     MaxLines="1"
                     Text="{Binding AgeRating}"
-                    TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                    TextColor="{AppThemeBinding Light={StaticResource Primary},
                                                 Dark={StaticResource White}}"
                     VerticalOptions="Center" />
             </Border>
