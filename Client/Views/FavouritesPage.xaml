@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Beholder.Views.favoritesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Beholder.Controls"
+    xmlns:converters="clr-namespace:Beholder.Converters"
+    xmlns:models="clr-namespace:Beholder.Models"
+    xmlns:vm="clr-namespace:Beholder.ViewModels"
+    Title="favoritesPage"
+    x:DataType="vm:FavoritesPageViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BooleanInverse x:Key="BooleanInverse" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid RowDefinitions="auto,*">
+        <Border
+            Grid.Row="0"
+            BackgroundColor="{StaticResource Primary}"
+            HeightRequest="50"
+            Stroke="{StaticResource Primary}">
+            <Grid Margin="12,0,6,0" ColumnDefinitions="auto,*,auto">
+                <HorizontalStackLayout Grid.Column="0">
+                    <Image
+                        HeightRequest="20"
+                        Source="{AppThemeBinding Light=user_light.png,
+                                                 Dark=user_dark.png}"
+                        WidthRequest="20" />
+                    <Button
+                        BackgroundColor="Transparent"
+                        Command="{Binding ToAuthorizationCommand}"
+                        ContentLayout="Left,5"
+                        HeightRequest="30"
+                        Text="{Binding UserName}"
+                        TextColor="{AppThemeBinding Light={StaticResource BarTextLight},
+                                                    Dark={StaticResource BarTextDark}}" />
+                </HorizontalStackLayout>
+                <controls:Update
+                    Grid.Column="2"
+                    Command="{Binding LoadDataCommand}"
+                    HeightRequest="30"
+                    WidthRequest="30" />
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1">
+            <Grid IsVisible="{Binding IsLoadSucces}">
+                <CollectionView
+                    Margin="12"
+                    IsVisible="{Binding IsBusy, Converter={StaticResource BooleanInverse}}"
+                    ItemsSource="{Binding Favorites}"
+                    VerticalScrollBarVisibility="Never">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:FavoriteResponse">
+
+                            <controls:ShortChannel
+                                Title="{Binding name}"
+                                ChannelId="{Binding id}"
+                                Image="{Binding icon_path}"
+                                TapCommand="{Binding BindingContext.OpenTeleprogramPageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" />
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <ActivityIndicator
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}"
+                    Scale="1" />
+            </Grid>
+            <ContentView Content="{Binding ProblemContent}" IsVisible="{Binding IsLoadSucces, Converter={StaticResource BooleanInverse}}" />
+
+        </Grid>
+    </Grid>
+</ContentPage>

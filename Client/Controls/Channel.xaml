@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="Beholder.Controls.Channel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Beholder.Controls"
+    xmlns:converters="clr-namespace:Beholder.Converters"
+    x:Name="This"
+    x:DataType="controls:Channel">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:StringTagsToList x:Key="StringTagsToList" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Border
+        Margin="18,8"
+        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight},
+                                          Dark={StaticResource SurfaceDark}}"
+        StrokeShape="RoundRectangle 10">
+        <Border.Shadow>
+            <OnPlatform x:TypeArguments="Shadow">
+                <On Platform="Android">
+                    <On.Value>
+                        <Shadow
+                            Brush="{StaticResource PrimaryShadowAndroid}"
+                            Opacity="0.5"
+                            Radius="5" />
+                    </On.Value>
+                </On>
+                <On Platform="WinUI">
+                    <On.Value>
+                        <Shadow
+                            Brush="{StaticResource PrimaryShadowWinUI}"
+                            Opacity="1.2"
+                            Radius="5" />
+                    </On.Value>
+                </On>
+            </OnPlatform>
+        </Border.Shadow>
+        <Grid
+            Padding="12,6"
+            ColumnDefinitions="auto,*"
+            ColumnSpacing="24"
+            RowDefinitions="30,30,30,*"
+            RowSpacing="6">
+            <controls:ChannelImage
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                x:DataType="controls:Channel"
+                BindingContext="{x:Reference This}"
+                Image="{Binding Image}" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                x:DataType="controls:Channel"
+                BindingContext="{x:Reference This}"
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="{Binding Number, StringFormat='{0} канал'}"
+                TextColor="{AppThemeBinding Light=#BBB,
+                                            Dark=#555}"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                x:DataType="controls:Channel"
+                BindingContext="{x:Reference This}"
+                FontAttributes="Bold"
+                FontSize="24"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding Title}"
+                TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight},
+                                            Dark={StaticResource PrimaryTextDark}}" />
+
+            <Label
+                Grid.Row="2"
+                Grid.Column="1"
+                x:DataType="controls:Channel"
+                BindingContext="{x:Reference This}"
+                FontSize="17"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding Description}"
+                TextColor="{AppThemeBinding Light={StaticResource SecondaryTextLight},
+                                            Dark={StaticResource SecondaryTextDark}}" />
+            <FlexLayout
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Padding="2"
+                x:DataType="controls:Channel"
+                BindableLayout.ItemsSource="{Binding Tags, Converter={StaticResource StringTagsToList}}"
+                BindingContext="{x:Reference This}"
+                Wrap="Wrap">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <controls:Tag Text="{Binding}" />
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+        </Grid>
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OpenTeleprogramPage" />
+        </Border.GestureRecognizers>
+    </Border>
+</ContentView>

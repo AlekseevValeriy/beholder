@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="Beholder.Controls.Teleprogram"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Beholder.Controls"
+    x:Name="This"
+    x:DataType="controls:Teleprogram">
+    <Border
+        Margin="12,8"
+        BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryLight},
+                                          Dark={StaticResource SecondaryDark}}"
+        StrokeShape="RoundRectangle 6"
+        StrokeThickness="0">
+        <Border.Shadow>
+            <OnPlatform x:TypeArguments="Shadow">
+                <On Platform="Android">
+                    <On.Value>
+                        <Shadow
+                            Brush="{StaticResource PrimaryShadowAndroid}"
+                            Opacity="0.8"
+                            Radius="3" />
+                    </On.Value>
+                </On>
+                <On Platform="WinUI">
+                    <On.Value>
+                        <Shadow
+                            Brush="{StaticResource PrimaryShadowWinUI}"
+                            Opacity="1.2"
+                            Radius="3" />
+                    </On.Value>
+                </On>
+            </OnPlatform>
+        </Border.Shadow>
+        <Grid
+            Margin="12,6"
+            ColumnDefinitions="auto,*,auto"
+            ColumnSpacing="18"
+            RowDefinitions="auto,auto,auto"
+            RowSpacing="8"
+            VerticalOptions="Center">
+            <VerticalStackLayout
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                HorizontalOptions="Center"
+                Spacing="18"
+                VerticalOptions="Center">
+                <Label
+                    x:DataType="controls:Teleprogram"
+                    BindingContext="{x:Reference This}"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    Text="{Binding TimeStart, StringFormat='{0:HH:mm}'}"
+                    TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                                Dark={StaticResource TertiaryTextDark}}" />
+                <Label
+                    x:DataType="controls:Teleprogram"
+                    BindingContext="{x:Reference This}"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    Text="{Binding TimeEnd, StringFormat='{0:HH:mm}'}"
+                    TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                                Dark={StaticResource TertiaryTextDark}}" />
+            </VerticalStackLayout>
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                x:DataType="controls:Teleprogram"
+                BindingContext="{x:Reference This}"
+                FontSize="18"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding Category}"
+                TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                            Dark=#777}" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                x:DataType="controls:Teleprogram"
+                BindingContext="{x:Reference This}"
+                FontAttributes="Bold"
+                FontSize="20"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding Title}"
+                TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                            Dark={StaticResource TertiaryTextDark}}" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="1"
+                x:DataType="controls:Teleprogram"
+                BindingContext="{x:Reference This}"
+                FontSize="16"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding Description}"
+                TextColor="{AppThemeBinding Light={StaticResource TertiaryTextLight},
+                                            Dark=#828282}" />
+            <Border
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="2"
+                BackgroundColor="{AppThemeBinding Dark=Transparent,
+                                                  Light=Transparent}"
+                HeightRequest="40"
+                HorizontalOptions="End"
+                StrokeShape="RoundRectangle 15"
+                WidthRequest="40">
+                <Label
+                    x:DataType="controls:Teleprogram"
+                    BindingContext="{x:Reference This}"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    LineBreakMode="TailTruncation"
+                    MaxLines="1"
+                    Text="{Binding AgeRating}"
+                    TextColor="{AppThemeBinding Light={StaticResource Primary},
+                                                Dark={StaticResource White}}"
+                    VerticalOptions="Center" />
+            </Border>
+
+        </Grid>
+    </Border>
+</ContentView>
