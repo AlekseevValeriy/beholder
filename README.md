@@ -2,16 +2,33 @@
 
 Мобильное приложение телегида с централизованным хранением данных о телеканалах в базе данных и передачей их клиентской части через сервер.
 
-
-## Технологии 🛠
+## Технологии
 
 ![C#](https://img.shields.io/badge/C%23-239120.svg?logo=C-sharp&style=flat)
 ![MAUI](https://img.shields.io/badge/.NET%20MAUI-512BD4?style=flat-square&logo=dotnet&logoColor=white)
 ![ASP.NET Minimal API](https://img.shields.io/badge/ASP.NET%20Minimal%20API-6C9A00?style=flat-square&logo=asp-dot-net&logoColor=white)
+![MS SQL Server](https://img.shields.io/badge/Microsoft_SQL_Server-CC2927)
 
+## Возможности
 
-## Особенности ✨
-- Современный дизайн — чистый и адаптивный интерфейс, соответствующий актуальным стандартам мобильных приложений.
-- Интуитивная навигация — продуманная структура экранов, обеспечивающая быстрое и понятное взаимодействие с приложением.
-- Лаконичность — минимум лишних элементов и максимальная концентрация на контенте.
-- Избранное — возможность сохранять любимые телеканалы для быстрого доступа к ним в будущем.
+- Поиск каналов по названию, номеру, тэгу
+- Отображение программы в карточке телеканала
+- Система профилей с сохранением избранных каналов
+
+## Установка
+
+```bash
+git clone https://github.com/AlekseevValeriy/basketball.git
+cd basketball
+```
+
+## Использование
+
+```bash
+dotnet restore
+dotnet build --configuration Release
+dotnet run
+```
+
+## Лицензия
+Распространяется по лицензии [MIT](LICENSE).
