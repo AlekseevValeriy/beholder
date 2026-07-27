@@ -18,8 +18,8 @@
 ## Установка
 
 ```bash
-git clone https://github.com/AlekseevValeriy/basketball.git
-cd basketball
+git clone https://github.com/AlekseevValeriy/beholder.git
+cd beholder
 ```
 
 ## Использование
