@@ -26,7 +26,19 @@ cd beholder
 
 ```bash
 dotnet restore
-dotnet build --configuration Release
+```
+
+### Клиент
+
+```bash
+cd Client
+dotnet build -t:Run -f net9.0-android
+```
+
+### Сервер
+
+```bash
+cd Server
 dotnet run
 ```
 
